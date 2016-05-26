@@ -1,16 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.thermostatmobileak.android.mobilethermostat.MainActivity">
 
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Switch
+            android:id="@+id/permanent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Permanent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+
+            <TextView
+                style="@style/home_screen_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Desired" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="-"/>
+
+            <TextView
+                android:id="@+id/target_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="21.6"
+                android:textColor="#000000"
+                android:textSize="42sp"
+                android:layout_margin="8dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="+"/>
+
+
+            </LinearLayout>
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar_current"
+                android:layout_gravity="center_horizontal"
+                android:max="30"
+                android:indeterminate="false"
+                android:progress="21"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+
+            <TextView
+                style="@style/home_screen_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Current" />
+
+            <TextView
+                android:id="@+id/current_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="21.0"
+                android:textColor="#000000"
+                android:textSize="42sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
-</RelativeLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Use Week Program" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="32dp"
+        android:text="Week Program Overview" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/dayttempString"
+            style="@style/home_screen_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Day Temperature"
+            android:layout_marginEnd="8dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            style="@style/home_screen_text"
+            android:id="@+id/night_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21.0 &#x2103;"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/dayttempString" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/nighttempString"
+            style="@style/home_screen_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Day Temperature"
+            android:layout_marginEnd="8dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            style="@style/home_screen_text"
+            android:id="@+id/day_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="16.0 &#x2103;"
+            android:layout_toEndOf="@+id/nighttempString" />
+
+    </RelativeLayout>
+
+    <TextView
+        style="@style/home_screen_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thermostat is connected"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"/>
+
+
+</LinearLayout>
