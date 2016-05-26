@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Github commit and push test 2 - akbokha
+    // Github commit and push test - akbokha
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
