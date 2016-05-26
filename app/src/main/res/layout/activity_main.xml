@@ -186,6 +186,7 @@
 
     <TextView
         style="@style/home_screen_text"
+        android:textColor="#009900"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thermostat is connected"
