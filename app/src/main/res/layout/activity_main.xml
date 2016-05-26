@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.thermostatmobileak.android.mobilethermostat.MainActivity">
+    tools:context="com.thermostatmobileak.android.mobilethermostat.MainActivity"
+    android:background="#CFD8DC">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -183,6 +184,13 @@
             android:layout_toEndOf="@+id/nighttempString" />
 
     </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change"
+        android:textAllCaps="true"
+        android:layout_gravity="center_horizontal"/>
 
     <TextView
         style="@style/home_screen_text"
