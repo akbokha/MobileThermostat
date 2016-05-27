@@ -14,7 +14,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
@@ -23,9 +22,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="Permanent" />
+            android:text="Vacation Mode"
+            android:textSize="18sp"/>
 
     </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Week Program is enabled"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"/>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +45,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.6"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:layout_margin="16dp">
@@ -77,6 +87,7 @@
                     android:text="+"/>
 
 
+
             </LinearLayout>
 
             <SeekBar
@@ -86,7 +97,8 @@
                 android:layout_gravity="center_horizontal"
                 android:max="30"
                 android:indeterminate="false"
-                android:progress="21"/>
+                android:progress="21" />
+
 
         </LinearLayout>
 
@@ -110,9 +122,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="21.0"
+                android:text="21.0 &#x2103;"
                 android:textColor="#000000"
-                android:textSize="42sp" />
+                android:textSize="32sp" />
+            
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/flame"/>
 
         </LinearLayout>
 
@@ -124,7 +141,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:text="Use Week Program" />
+        android:text="Use Week Program"
+        android:checked="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        >
 
     <Button
         android:layout_width="wrap_content"
@@ -132,6 +156,13 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="32dp"
         android:text="Week Program Overview" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_info_black_24dp"/>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -145,7 +176,8 @@
             android:layout_height="wrap_content"
             android:text="Day Temperature"
             android:layout_marginEnd="8dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"/>
 
         <TextView
             style="@style/home_screen_text"
@@ -170,10 +202,11 @@
             style="@style/home_screen_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Day Temperature"
+            android:text="Night Temperature"
             android:layout_marginEnd="8dp"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"/>
 
         <TextView
             style="@style/home_screen_text"
@@ -192,6 +225,12 @@
         android:textAllCaps="true"
         android:layout_gravity="center_horizontal"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="16dp">
+
     <TextView
         style="@style/home_screen_text"
         android:textColor="#009900"
@@ -199,7 +238,17 @@
         android:layout_height="wrap_content"
         android:text="Thermostat is connected"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="16dp"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="8dp"
+        android:textStyle="bold"
+        />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sync_black_24dp"/>
+
+    </LinearLayout>
 
 
 </LinearLayout>
