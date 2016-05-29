@@ -26,12 +26,28 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
             <TextView
                 style="@style/home_screen_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Desired" />
+                android:text="Desired"
+                android:textStyle="bold"/>
+
+                <TextView
+                    style="@style/home_screen_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="Temperature"
+                    />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -45,7 +61,7 @@
                     android:minHeight="0dp"
                     android:minWidth="0dp"
                     android:text="-"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -61,6 +77,7 @@
                         android:text="21.6"
                         android:textColor="#000000"
                         android:textSize="48sp" />
+
 
                     <com.devadvance.circularseekbar.CircularSeekBar
                         android:id="@+id/temp_seekbar"
@@ -87,7 +104,7 @@
                     android:minHeight="0dp"
                     android:minWidth="0dp"
                     android:text="+"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
             </LinearLayout>
 
@@ -119,7 +136,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Current" />
+                android:text="Current"
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/current_temp"
@@ -128,7 +146,8 @@
                 android:layout_marginBottom="16dp"
                 android:text="21.0 &#x2103;"
                 android:textColor="#000000"
-                android:textSize="32sp" />
+                android:textSize="32sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/flame"
@@ -282,6 +301,12 @@
         android:layout_marginTop="16dp"
         android:gravity="center_horizontal">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/temperature52"
+            android:layout_marginRight="4dp"/>
+
         <TextView
             style="@style/home_screen_text"
             android:layout_width="wrap_content"
@@ -291,7 +316,7 @@
             android:layout_marginTop="8dp"
             android:text="Thermostat is connected"
             android:textColor="#009900"
-            android:textStyle="bold" />
+            android:textStyle="bold|italic" />
 
         <ImageView
             android:layout_width="wrap_content"
