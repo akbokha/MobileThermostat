@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,7 +30,7 @@
                 style="@style/home_screen_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="Desired" />
 
             <LinearLayout
@@ -43,17 +44,41 @@
                     android:layout_height="wrap_content"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:text="-" />
+                    android:text="-"
+                    android:visibility="invisible" />
 
-                <TextView
-                    android:id="@+id/target_temp"
+                <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="21.6"
-                    android:textColor="#000000"
-                    android:textSize="48sp" />
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/target_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="21.6"
+                        android:textColor="#000000"
+                        android:textSize="48sp" />
+
+                    <com.devadvance.circularseekbar.CircularSeekBar
+                        android:id="@+id/temp_seekbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="false"
+                        app:circle_color="#FF9E80"
+                        app:circle_progress_color="#FF5722"
+                        app:end_angle="260"
+                        app:lock_enabled="false"
+                        app:max="250"
+                        app:pointer_color="#DD2C00"
+                        app:pointer_halo_color="#FF6E40"
+                        app:pointer_halo_color_ontouch="#FF3D00"
+                        app:progress="160"
+                        app:start_angle="-80" />
+
+                </FrameLayout>
 
                 <Button
                     android:id="@+id/plusbutton"
@@ -61,11 +86,12 @@
                     android:layout_height="wrap_content"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:text="+" />
+                    android:text="+"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 
-            <SeekBar
+            <!-- <SeekBar
                 android:id="@+id/temp_seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +99,8 @@
                 android:layout_marginTop="4dp"
                 android:indeterminate="false"
                 android:max="250"
-                android:progress="160" />
+                android:progress="160"
+                android:visibility="invisible"/> -->
 
 
         </LinearLayout>
@@ -91,7 +118,7 @@
                 style="@style/home_screen_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="Current" />
 
             <TextView
@@ -122,7 +149,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_horizontal">
 
         <Button
@@ -147,7 +174,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:checked="true"
         android:text="Use Week Program"
         android:textSize="16sp" />
@@ -157,7 +184,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="8dp"
         android:text="Week Program is enabled" />
 
@@ -171,6 +198,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@+id/dayttempString"
+            android:src="@mipmap/sun48" />
 
         <TextView
             android:id="@+id/dayttempString"
@@ -197,8 +231,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@+id/nighttempString"
+            android:src="@mipmap/moon48" />
 
         <TextView
             android:id="@+id/nighttempString"
@@ -238,7 +279,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_horizontal">
 
         <TextView
@@ -247,7 +288,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="Thermostat is connected"
             android:textColor="#009900"
             android:textStyle="bold" />
@@ -256,6 +297,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_sync_black_24dp" />
+
 
     </LinearLayout>
 

@@ -1,7 +1,6 @@
 package com.thermostatmobileak.android.mobilethermostat;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
@@ -9,8 +8,6 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,18 +20,21 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.thermostatapp.util.HeatingSystem;
-import org.w3c.dom.Text;
 
 import java.net.ConnectException;
 
-public class MainActivity extends AppCompatActivity {
+import com.devadvance.circularseekbar.CircularSeekBar;
+import com.devadvance.circularseekbar.CircularSeekBar.OnCircularSeekBarChangeListener;
+
+
+public class MainActivity extends AppCompatActivity  {
 
     Button plus_button, minus_button, change_button, weekprogramButton;
     TextView current_temp, desired_temp;
     TextView day_temp_home, night_temp_home;
     double curr_temp, des_temp;
     double day_temp, night_temp;
-    SeekBar temp_seekbar;
+    CircularSeekBar temp_seekbar;
     ImageView flame_drawable;
     CheckBox weekProgram;
     TextView weekProgramState, text_checkbox_state;
@@ -48,13 +48,12 @@ public class MainActivity extends AppCompatActivity {
 
         plus_button = (Button) findViewById(R.id.plusbutton);
         minus_button = (Button) findViewById(R.id.minusbutton);
-        temp_seekbar = (SeekBar) findViewById(R.id.temp_seekbar);
 
         HeatingSystem.BASE_ADDRESS = "http://pcwin889.win.tue.nl/2id40-ws/004";
 
         current_temp = (TextView) findViewById(R.id.current_temp);
         desired_temp = (TextView) findViewById(R.id.target_temp);
-        temp_seekbar = (SeekBar) findViewById(R.id.temp_seekbar);
+        temp_seekbar = (CircularSeekBar) findViewById(R.id.temp_seekbar);
 
         day_temp_home = (TextView) findViewById(R.id.day_temp_home);
         night_temp_home = (TextView) findViewById(R.id.night_temp_home);
@@ -136,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                weekProgram.setChecked(false);
+                                weekProgram.setChecked(true);
                                 weekProgramState.setText("Week program is disabled.");
                             }
                         });
@@ -234,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }.start();
 
-        /* Set listeners for all buttons */
+        /* Set listeners for all buttons
         // Seekbar listener
         temp_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -252,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
-        });
+        }); */
 
         /*
         // Info button listener
@@ -348,6 +347,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(v.getContext(), DayNight.class));
             }
         }); */
+
+        temp_seekbar.setOnSeekBarChangeListener(new com.thermostatmobileak.android.mobilethermostat.CircleSeekBarListener(){
+        @Override
+        public void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser) {
+            des_temp = (progress + 50) / 10.0;
+            DesiredTempUpdate();
+            setInputLimits();
+            putCurrentTemperature();
+
+        }
+            @Override
+            public void onStartTrackingTouch(CircularSeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(CircularSeekBar seekBar) {
+            }
+        });
 
     }
 
@@ -494,5 +511,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
 }
