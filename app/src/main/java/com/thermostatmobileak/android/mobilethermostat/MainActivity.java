@@ -1,6 +1,7 @@
 package com.thermostatmobileak.android.mobilethermostat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
@@ -339,14 +340,14 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        /*
-        // Change button listener
+
+        // intent to new activity + listener for change button on home sreen
         change_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), DayNight.class));
+                startActivity(new Intent(v.getContext(), DayNight_Temp_Change.class));
             }
-        }); */
+        });
 
         temp_seekbar.setOnSeekBarChangeListener(new com.thermostatmobileak.android.mobilethermostat.CircleSeekBarListener(){
         @Override
