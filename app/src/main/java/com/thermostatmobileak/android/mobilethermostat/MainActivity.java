@@ -6,6 +6,9 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.CountDownTimer;
+import android.provider.ContactsContract;
+import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 
 
@@ -16,9 +19,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.thermostatapp.util.HeatingSystem;
 
@@ -30,7 +35,8 @@ import com.devadvance.circularseekbar.CircularSeekBar.OnCircularSeekBarChangeLis
 
 public class MainActivity extends AppCompatActivity  {
 
-    Button plus_button, minus_button, change_button, weekprogramButton;
+    ImageButton plus_button, minus_button;
+    Button change_button, weekprogramButton;
     TextView current_temp, desired_temp;
     TextView day_temp_home, night_temp_home;
     double curr_temp, des_temp;
@@ -40,15 +46,16 @@ public class MainActivity extends AppCompatActivity  {
     CheckBox weekProgram;
     TextView weekProgramState, text_checkbox_state;
     boolean weekProgramEnabled, permanent_mode = true;
-    ImageView info_button;
+    ImageView info_button, connection_logo, thermo_icon_home;
+    TextView home_screen_connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        plus_button = (Button) findViewById(R.id.plusbutton);
-        minus_button = (Button) findViewById(R.id.minusbutton);
+        plus_button = (ImageButton) findViewById(R.id.plusbutton);
+        minus_button = (ImageButton) findViewById(R.id.minusbutton);
 
         HeatingSystem.BASE_ADDRESS = "http://pcwin889.win.tue.nl/2id40-ws/004";
 
@@ -67,6 +74,40 @@ public class MainActivity extends AppCompatActivity  {
         info_button = (ImageView) findViewById(R.id.info_button);
         change_button = (Button) findViewById(R.id.change_button);
         weekprogramButton = (Button) findViewById(R.id.week_program_button);
+
+        home_screen_connection = (TextView)findViewById(R.id.home_connection);
+        connection_logo = (ImageView) findViewById(R.id.connection_logo);
+        thermo_icon_home = (ImageView) findViewById(R.id.thermostat_icon_home);
+
+        if(!isOnline()) {
+            Toast disconnected = Toast.makeText(getApplicationContext(), "In order to use this app you need an internet connection", Toast.LENGTH_LONG);
+            disconnected.show();
+            home_screen_connection.setText("Thermostat is disconnected");
+            home_screen_connection.setTextColor(Color.rgb(198,0,0));
+            connection_logo.setImageResource(R.drawable.ic_sync_disabled_black_24dp);
+
+            plus_button.setClickable(false);
+            plus_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            minus_button.setClickable(false);
+            minus_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            change_button.setClickable(false);
+            change_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            weekprogramButton.setClickable(false);
+            weekprogramButton.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            weekProgram.setClickable(false);
+            weekProgram.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+
+            new CountDownTimer(6000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
+                public void onFinish() {
+                    Toast quitprogram = Toast.makeText(getApplicationContext(), "Application is quitted. Restart when internet connection is (re)established", Toast.LENGTH_LONG);
+                    quitprogram.show();
+                    finish();
+                }
+            }.start();
+
+        }
 
         // Thread to get the values of our heatingsystem for night / day temperatures
         new Thread(new Runnable() {
@@ -295,6 +336,7 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v) {//increase temperature via button
                 if (des_temp <= 30) {
                     des_temp += 0.1;
+                    flame_drawable.setImageAlpha(255);
                     DesiredTempUpdate();
                     temp_seekbar.setProgress((int) (des_temp * 10 - 50));
                     setInputLimits();
@@ -443,21 +485,21 @@ public class MainActivity extends AppCompatActivity  {
 
     /* Graying out buttons and re-enabling them */
     public void setInputLimits() {
-        if (des_temp == 30) {
-            plus_button.setClickable(false);
-            plus_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
-            minus_button.setClickable(true);
-            minus_button.getBackground().setColorFilter(null);
-        } else if (des_temp == 5) {
-            minus_button.setClickable(false);
-            minus_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
-            plus_button.setClickable(true);
-        } else {
-            minus_button.setClickable(true);
-            minus_button.getBackground().setColorFilter(null);
-            plus_button.setClickable(true);
-            plus_button.getBackground().setColorFilter(null);
-        }
+            if (des_temp == 30) {
+                plus_button.setClickable(false);
+                plus_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+                minus_button.setClickable(true);
+                minus_button.getBackground().setColorFilter(null);
+            } else if (des_temp == 5) {
+                minus_button.setClickable(false);
+                minus_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+                plus_button.setClickable(true);
+            } else {
+                minus_button.setClickable(true);
+                minus_button.getBackground().setColorFilter(null);
+                plus_button.setClickable(true);
+                plus_button.getBackground().setColorFilter(null);
+            }
     }
 
     /* Reload day & night temperature when the day activity is revisited */
