@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity  {
         plus_button = (ImageButton) findViewById(R.id.plusbutton);
         minus_button = (ImageButton) findViewById(R.id.minusbutton);
 
-        HeatingSystem.BASE_ADDRESS = "http://pcwin889.win.tue.nl/2id40-ws/004";
+        HeatingSystem.BASE_ADDRESS = "http://wwwis.win.tue.nl/2id40-ws/004";
 
         current_temp = (TextView) findViewById(R.id.current_temp);
         desired_temp = (TextView) findViewById(R.id.target_temp);
@@ -275,25 +275,6 @@ public class MainActivity extends AppCompatActivity  {
             }
         }.start();
 
-        /* Set listeners for all buttons
-        // Seekbar listener
-        temp_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                des_temp = (progress + 50) / 10.0;
-                DesiredTempUpdate();
-                setInputLimits();
-                putCurrentTemperature();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        }); */
 
         /*
         // Info button listener
@@ -339,7 +320,7 @@ public class MainActivity extends AppCompatActivity  {
                     flame_drawable.setImageAlpha(255);
                     DesiredTempUpdate();
                     temp_seekbar.setProgress((int) (des_temp * 10 - 50));
-                    setInputLimits();
+                    max_and_min();
                 }
                 putCurrentTemperature();
             }
@@ -352,7 +333,7 @@ public class MainActivity extends AppCompatActivity  {
                     des_temp -= 0.1;
                     DesiredTempUpdate();
                     temp_seekbar.setProgress((int) (des_temp * 10 - 50));
-                    setInputLimits();
+                    max_and_min();
                 }
                 putCurrentTemperature();
             }
@@ -396,7 +377,7 @@ public class MainActivity extends AppCompatActivity  {
         public void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser) {
             des_temp = (progress + 50) / 10.0;
             DesiredTempUpdate();
-            setInputLimits();
+            max_and_min();
             putCurrentTemperature();
 
         }
@@ -483,8 +464,8 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    /* Graying out buttons and re-enabling them */
-    public void setInputLimits() {
+    // graying out buttons/making them unclickable and vice versa when max and min temperatures are reached
+    public void max_and_min() {
             if (des_temp == 30) {
                 plus_button.setClickable(false);
                 plus_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
