@@ -35,9 +35,9 @@ public class DayNight_Temp_Change extends AppCompatActivity {
         minus_night = (ImageButton) findViewById(R.id.change_nightMinus);
 
         daySeekbar = (CircularSeekBar) findViewById(R.id.change_daySeekbar);
-        daySeekbar.setProgress(160);
+
         nightSeekbar = (CircularSeekBar) findViewById(R.id.change_nightSeekbar);
-        nightSeekbar.setProgress(160);
+
 
         change_daytemp = (TextView) findViewById(R.id.change_daytemp);
         change_nighttemp = (TextView) findViewById(R.id.change_nighttemp);
@@ -180,14 +180,24 @@ public class DayNight_Temp_Change extends AppCompatActivity {
     public void changeDayTemp() {
         day_temp = Math.round(day_temp*10);
         day_temp = day_temp/10;
-        change_daytemp.setText(day_temp + "");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                change_daytemp.setText(day_temp + "");
+            }
+        });
     }
 
     // change/set the textview for the night temperature
     public void changeNightTemp() {
         night_temp = Math.round(night_temp*10);
         night_temp = night_temp/10;
-        change_nighttemp.setText(night_temp + "");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                change_nighttemp.setText(night_temp + "");
+            }
+        });
     }
 
     // change/set the day temperature on the web service
@@ -271,5 +281,30 @@ public class DayNight_Temp_Change extends AppCompatActivity {
             minus_night.setClickable(true);
             minus_night.getBackground().setColorFilter(null);
         }
+    }
+
+    /* Reload day & night temperature when the day activity is revisited */
+    public void onResume() {
+        super.onResume();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    day_temp = Double.parseDouble(HeatingSystem.get("dayTemperature"));
+                    night_temp = Double.parseDouble(HeatingSystem.get("nightTemperature"));
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            change_daytemp.setText(day_temp + "");
+                            change_nighttemp.setText(night_temp + "");
+                            progress_DaySeekbar();
+                            progress_NightSeekbar();
+                        }
+                    });
+                } catch (Exception e) {
+                    System.err.println("Error from getdata " + e);
+                }
+            }
+        }).start();
     }
 }
