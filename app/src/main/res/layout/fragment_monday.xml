@@ -1,0 +1,332 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.thermostatmobileak.android.mobilethermostat.Monday"
+    android:background="#CFD8DC">
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical"
+       >
+
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="16dp">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Day Switch"
+               android:textSize="20sp"
+               android:textStyle="bold"
+               android:layout_marginLeft="64dp"
+               android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/mon_day_time"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="12:00 AM"
+               android:layout_marginLeft="52dp"
+               android:textSize="20sp"
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-condensed"/>
+
+           <ImageButton
+               android:id="@+id/mon_day_edit"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="12dp"
+               android:minHeight="24dp"
+               android:maxHeight="24dp"
+               android:src="@mipmap/pencil_36"
+               android:padding="0dp"/>
+
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="6dp">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Night Switch"
+               android:textSize="20sp"
+               android:textStyle="bold"
+               android:layout_marginLeft="60dp"
+               android:layout_gravity="center_vertical"/>
+
+           <TextView
+               android:id="@+id/mon_night_time"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="12:00 AM"
+               android:layout_marginLeft="41dp"
+               android:textSize="20sp"
+               android:layout_gravity="center_vertical"
+               android:textStyle="bold"
+               android:fontFamily="sans-serif-condensed"/>
+
+           <ImageButton
+               android:id="@+id/mon_night_edit"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="12dp"
+               android:maxHeight="16dp"
+               android:maxWidth="16dp"
+               android:src="@mipmap/pencil_36"
+               android:padding="0dp"/>
+
+
+       </LinearLayout>
+
+       <Button
+           android:id="@+id/mon_add"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Add swithces"
+           android:layout_gravity="center_horizontal"
+           android:layout_marginBottom="8dp"
+           android:layout_marginTop="4dp"/>
+
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="3dp"
+           android:background="#FF9E80" />
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Current Monday Switches (max. 5)"
+           android:textSize="16sp"
+           android:layout_marginTop="8dp"
+           android:layout_marginBottom="8dp"
+           android:layout_gravity="center_horizontal"
+           />
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal">
+
+           <TextView
+               android:id="@+id/mon_switch1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="18sp"
+               android:fontFamily="sans-serif-condensed"
+               android:text="1. Day: 12:00 AM, Night: 12:00 AM"
+               android:textStyle="bold"/>
+
+           <ImageButton
+               android:id="@+id/mon_trash1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@mipmap/delete_36"
+               android:padding="0dp"
+               android:layout_marginLeft="8dp"/>
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal"
+           android:layout_marginTop="8dp">
+
+           <TextView
+               android:id="@+id/mon_switch2"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="18sp"
+               android:fontFamily="sans-serif-condensed"
+               android:text="2. Day: 12:00 AM, Night: 12:00 AM"
+               android:textStyle="bold"/>
+
+           <ImageButton
+               android:id="@+id/mon_trash2"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@mipmap/delete_36"
+               android:padding="0dp"
+               android:layout_marginLeft="8dp"/>
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal"
+           android:layout_marginTop="8dp">
+
+           <TextView
+               android:id="@+id/mon_switch3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="18sp"
+               android:fontFamily="sans-serif-condensed"
+               android:text="3. Day: 12:00 AM, Night: 12:00 AM"
+               android:textStyle="bold"/>
+
+           <ImageButton
+               android:id="@+id/mon_trash3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@mipmap/delete_36"
+               android:padding="0dp"
+               android:layout_marginLeft="8dp"/>
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal"
+           android:layout_marginTop="8dp">
+
+           <TextView
+               android:id="@+id/mon_switch4"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="18sp"
+               android:fontFamily="sans-serif-condensed"
+               android:text="4. Day: 12:00 AM, Night: 12:00 AM"
+               android:textStyle="bold"/>
+
+           <ImageButton
+               android:id="@+id/mon_trash4"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@mipmap/delete_36"
+               android:padding="0dp"
+               android:layout_marginLeft="8dp"/>
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal"
+           android:layout_marginTop="8dp">
+
+           <TextView
+               android:id="@+id/mon_switch5"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="18sp"
+               android:fontFamily="sans-serif-condensed"
+               android:text="5. Day: 12:00 AM, Night: 12:00 AM"
+               android:textStyle="bold"/>
+
+           <ImageButton
+               android:id="@+id/mon_trash5"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@mipmap/delete_36"
+               android:padding="0dp"
+               android:layout_marginLeft="8dp"/>
+
+       </LinearLayout>
+
+       <Button
+           android:id="@+id/mon_remove_all"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Remove All Switches"
+           android:layout_gravity="center_horizontal"
+           android:layout_margin="8dp"/>
+
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="3dp"
+           android:background="#FF9E80"
+           />
+
+       <RelativeLayout
+           android:layout_marginTop="24dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal">
+
+           <ImageView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginRight="8dp"
+               android:layout_toLeftOf="@+id/dayttempString"
+               android:src="@mipmap/sun48" />
+
+           <TextView
+               android:id="@+id/dayttempString"
+               style="@style/home_screen_text"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerHorizontal="true"
+               android:layout_marginEnd="8dp"
+               android:text="Day Temperature"
+               />
+
+           <TextView
+               android:id="@+id/mon_day_temp"
+               style="@style/home_screen_text"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentTop="true"
+               android:layout_toEndOf="@+id/dayttempString"
+               android:text="XX.X &#x2103;" />
+
+
+       </RelativeLayout>
+
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="8dp"
+           android:gravity="center_horizontal">
+
+           <ImageView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginRight="8dp"
+               android:layout_toLeftOf="@+id/nighttempString"
+               android:src="@mipmap/moon48" />
+
+           <TextView
+               android:id="@+id/nighttempString"
+               style="@style/home_screen_text"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentTop="true"
+               android:layout_centerHorizontal="true"
+               android:layout_marginEnd="8dp"
+               android:text="Night Temperature"/>
+
+           <TextView
+               android:id="@+id/mon_night_temp"
+               style="@style/home_screen_text"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_toEndOf="@+id/nighttempString"
+               android:text="XX.X &#x2103;" />
+
+       </RelativeLayout>
+
+       <Button
+           android:id="@+id/mon_change_button"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center_horizontal"
+           android:text="Change Temperature(s)"
+           android:textAllCaps="true" />
+
+
+   </LinearLayout>
+
+</RelativeLayout>

@@ -339,7 +339,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        /*
+
         // Week overview button listener
         weekprogramButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity  {
                 Intent toWeekOverview = new Intent(v.getContext(), WeekOverview.class);
                 startActivity(toWeekOverview);
             }
-        }); */
+        });
 
         // Vacation mode checkbox listener
         weekProgram.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -379,6 +379,9 @@ public class MainActivity extends AppCompatActivity  {
             DesiredTempUpdate();
             max_and_min();
             putCurrentTemperature();
+            if (des_temp > curr_temp) {
+                flame_drawable.setImageAlpha(255);
+            }
 
         }
             @Override

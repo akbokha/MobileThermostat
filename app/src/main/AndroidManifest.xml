@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.thermostatmobileak.android.mobilethermostat">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -18,9 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DayNight_Temp_Change"
-            android:label="Day and Night Temperatures">
-        </activity>
+        <activity
+            android:name=".DayNight_Temp_Change"
+            android:label="Day and Night Temperatures"></activity>
+        <activity android:name=".WeekOverview"
+            android:label="Week Overview"></activity>
     </application>
 
 </manifest>
