@@ -35,7 +35,8 @@
                 android:textSize="20sp"
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
-                android:fontFamily="sans-serif-condensed"/>
+                android:fontFamily="sans-serif-condensed"
+                android:onClick="showTimePickerDialog"/>
 
             <ImageButton
                 android:id="@+id/wed_day_edit"
@@ -45,7 +46,8 @@
                 android:minHeight="24dp"
                 android:maxHeight="24dp"
                 android:src="@mipmap/pencil_36"
-                android:padding="0dp"/>
+                android:padding="0dp"
+                android:onClick="showTimePickerDialog"/>
 
 
         </LinearLayout>
@@ -73,7 +75,8 @@
                 android:textSize="20sp"
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
-                android:fontFamily="sans-serif-condensed"/>
+                android:fontFamily="sans-serif-condensed"
+                android:onClick="showTimePickerDialog"/>
 
             <ImageButton
                 android:id="@+id/wed_night_edit"
@@ -83,7 +86,8 @@
                 android:maxHeight="16dp"
                 android:maxWidth="16dp"
                 android:src="@mipmap/pencil_36"
-                android:padding="0dp"/>
+                android:padding="0dp"
+                android:onClick="showTimePickerDialog"/>
 
 
         </LinearLayout>
