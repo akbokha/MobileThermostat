@@ -35,8 +35,7 @@
                 android:textSize="20sp"
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
-                android:fontFamily="sans-serif-condensed"
-                android:onClick="showTimePickerDialog"/>
+                android:fontFamily="sans-serif-condensed"/>
 
             <ImageButton
                 android:id="@+id/sat_day_edit"
@@ -46,8 +45,7 @@
                 android:minHeight="24dp"
                 android:maxHeight="24dp"
                 android:src="@mipmap/pencil_36"
-                android:padding="0dp"
-                android:onClick="showTimePickerDialog"/>
+                android:padding="0dp"/>
 
 
         </LinearLayout>
@@ -75,8 +73,7 @@
                 android:textSize="20sp"
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
-                android:fontFamily="sans-serif-condensed"
-                android:onClick="showTimePickerDialog"/>
+                android:fontFamily="sans-serif-condensed"/>
 
             <ImageButton
                 android:id="@+id/sat_night_edit"
@@ -86,8 +83,7 @@
                 android:maxHeight="16dp"
                 android:maxWidth="16dp"
                 android:src="@mipmap/pencil_36"
-                android:padding="0dp"
-                android:onClick="showTimePickerDialog"/>
+                android:padding="0dp"/>
 
 
         </LinearLayout>
@@ -127,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-condensed"
-                android:text="1. Day: 12:00 AM, Night: 12:00 AM"
+                android:text=""
                 android:textStyle="bold"/>
 
             <ImageButton
@@ -136,7 +132,8 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/delete_36"
                 android:padding="0dp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginLeft="8dp"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 
@@ -152,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-condensed"
-                android:text="2. Day: 12:00 AM, Night: 12:00 AM"
+                android:text=""
                 android:textStyle="bold"/>
 
             <ImageButton
@@ -161,7 +158,8 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/delete_36"
                 android:padding="0dp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginLeft="8dp"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 
@@ -177,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-condensed"
-                android:text="3. Day: 12:00 AM, Night: 12:00 AM"
+                android:text=""
                 android:textStyle="bold"/>
 
             <ImageButton
@@ -186,7 +184,8 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/delete_36"
                 android:padding="0dp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginLeft="8dp"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 
@@ -202,7 +201,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-condensed"
-                android:text="4. Day: 12:00 AM, Night: 12:00 AM"
+                android:text=""
                 android:textStyle="bold"/>
 
             <ImageButton
@@ -211,7 +210,8 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/delete_36"
                 android:padding="0dp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginLeft="8dp"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 
@@ -227,7 +227,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-condensed"
-                android:text="5. Day: 12:00 AM, Night: 12:00 AM"
+                android:text=""
                 android:textStyle="bold"/>
 
             <ImageButton
@@ -236,7 +236,8 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/delete_36"
                 android:padding="0dp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginLeft="8dp"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 
@@ -284,7 +285,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/dayttempString"
-                android:text="XX.X &#x2103;" />
+                android:text="XX.X &#x2103;"
+                android:textStyle="bold"/>
 
 
         </RelativeLayout>
@@ -318,7 +320,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/nighttempString"
-                android:text="XX.X &#x2103;" />
+                android:text="XX.X &#x2103;"
+                android:textStyle="bold"/>
 
         </RelativeLayout>
 

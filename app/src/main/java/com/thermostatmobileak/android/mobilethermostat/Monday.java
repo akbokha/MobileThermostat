@@ -62,17 +62,18 @@ public class Monday extends Fragment {
 
     // variables that we will use in the timepicker class for example
     static String switch_DayTime, switch_NightTime;
+    static String[] times;
+    /* entry 0: day hours
+       entry 1: day minutes
+       entry 2: night hours
+       entry 4: night minutes*/
     static int[] input;
     /* entry 0: day hours
        entry 1: day minutes
        entry 2: night hours
        entry 4: night minutes*/
     static Boolean dayOrNot;
-    static String[] times;
-    /* entry 0: day hours
-       entry 1: day minutes
-       entry 2: night hours
-       entry 4: night minutes*/
+
 
     boolean grant = true;
 
@@ -104,15 +105,16 @@ public class Monday extends Fragment {
         View view = inflater.inflate(R.layout.fragment_monday, container, false);
         super.onCreate(savedInstanceState);
 
+        dayswitch_time = (TextView) view.findViewById(R.id.mon_day_time);
+        nightswitch_time = (TextView) view.findViewById(R.id.mon_night_time);
+
+        // needs to be in this order (because of call to show_input
+        times = new String[4];
         input = new int[]{0, 0, 0, 0};
         dayOrNot = true;
         show_input(input[0], input[1]);
         dayOrNot = false;
         show_input(input[2], input[3]);
-        times = new String[4];
-
-        dayswitch_time = (TextView) view.findViewById(R.id.mon_day_time);
-        nightswitch_time = (TextView) view.findViewById(R.id.mon_night_time);
 
         mon_switch1 = (TextView)view.findViewById(R.id.mon_switch1);
         mon_switch2 = (TextView)view.findViewById(R.id.mon_switch2);
@@ -206,7 +208,7 @@ public class Monday extends Fragment {
                         times[i] = "0" + times[i];
                     }
                 }
-                // Check whether the inputted times (timepickerfragment) are acceptable in
+                // Check whether the inputted times (Monday_DialogFragment_TimePick) are acceptable in
                 int input_day = Integer.parseInt(times[0] + times[1], 10);
                 int input_night = Integer.parseInt(times[2] + times[3], 10);
                 for(int i = 0; i<5; i++) {
@@ -218,7 +220,7 @@ public class Monday extends Fragment {
                         String night_tmp2 = night_tmp.substring(0,2) + night_tmp.substring(3,5);
                         int day_old = Integer.parseInt(day_tmp2, 10);
                         int night_old = Integer.parseInt(night_tmp2, 10);
-                        // Check wheter there is overlap in th input (timepickerfragment)
+                        // Check wheter there is overlap in th input (Monday_DialogFragment_TimePick)
                         if (input_day < day_old && input_night < day_old) {
                             // the inputted switch comes before the current switch(es)
                         } else if (input_day > night_old && input_night > night_old) {
@@ -380,7 +382,7 @@ public class Monday extends Fragment {
         mon_day_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new TimePickerFragment();
+                DialogFragment newFragment = new Monday_DialogFragment_TimePick();
                 newFragment.show(getActivity().getFragmentManager(), "timePicker");
                 dayOrNot = true;
             }
@@ -393,7 +395,7 @@ public class Monday extends Fragment {
         mon_day_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new TimePickerFragment();
+                DialogFragment newFragment = new Monday_DialogFragment_TimePick();
                 newFragment.show(getActivity().getFragmentManager(), "timePicker");
                 dayOrNot = true;
             }
@@ -407,7 +409,7 @@ public class Monday extends Fragment {
         mon_night_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new TimePickerFragment();
+                DialogFragment newFragment = new Monday_DialogFragment_TimePick();
                 newFragment.show(getActivity().getFragmentManager(), "timePicker");
 
                 dayOrNot = false;
@@ -421,7 +423,7 @@ public class Monday extends Fragment {
         mon_night_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new TimePickerFragment();
+                DialogFragment newFragment = new Monday_DialogFragment_TimePick();
                 newFragment.show(getActivity().getFragmentManager(), "timePicker");
                 dayOrNot = false;
             }
