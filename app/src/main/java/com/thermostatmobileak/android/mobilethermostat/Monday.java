@@ -30,41 +30,56 @@ import java.util.ArrayList;
  */
 public class Monday extends Fragment {
 
-    // Declare arraylists with switches for each day
+    /* Arraylist for the switches for Monday and The initializations of the textviews for the
+       switches in the layout for the monday switches */
     public ArrayList<Switch> mondaySwitches;
+    TextView mon_switch1, mon_switch2, mon_switch3, mon_switch4, mon_switch5;
 
-    // Declare week program
-    WeekProgram wkProgram;
-    // Declare layout
-    Button bMondayAdd;
-    Button bMondayRemoveAll;
-    Button bMondayChange;
-    TextView mondaySwitch1, mondaySwitch2, mondaySwitch3, mondaySwitch4, mondaySwitch5;
-    ImageButton[] bMondayRemoveSwitches = new ImageButton[5]; // remove buttons
-    TextView mondayDayTempText, mondayNightTempText, mondayDayTemp, mondayNightTemp;
-    EditText mondayDaySwitchHrs, mondayDaySwitchMins, mondayNightSwitchHrs, mondayNightSwitchMins;
-    TextView mondayTitle;
-    static TextView dayTimeText;
-    static TextView nightTimeText;
-    // Declare day and night temperature
-    double dayTemp;
-    double nightTemp;
-    // Declare day and daynumber to be initialized in subclasses
+    // Textviews for displaying the day and night temperature in the weekday fragment
+    TextView mon_dayTemp, mondayNightTemp;
+
+    /* Buttons in the weekday fragment (one for adding switches, one to remove all switches
+       and one that is an intent to the activity where you can change the day/night temperature*/
+    Button mon_add, mon_removeAll, mon_changeDayNight;
+
+    // Array for the imagebuttons (trashcans) to delete individual switches (contrary to removeAll)
+    ImageButton[] mon_independentSwitches = new ImageButton[5];
+
+    // Weekprogram, see package provided by the university (org.thermostatapp.util)
+    WeekProgram weekProgram;
+
+    // TextViews for the displaying the time of the day and night switches (when adding)
+    static TextView dayswitch_time, nightswitch_time;
+
+    // initializing the variables for the day and night temperature
+    double dayTemp, nightTemp;
+
+    // we will use this when making certain calls
     String day;
-    int dayNumber;
-    // Some local variables that didn't want to be local without being final (inner class)
-    int j;
-    int remove1;
-    int remove2;
-    // Switch vars
-    static String daySwitchTime;
-    static String nightSwitchTime;
-    static Boolean isDay;
-    static String[] times; // 0: day hour, 1: day minute, 2: night hour, 3: night minute
-    static int[] input; // 0: day hour, 1: day minute, 2: night hour, 3: night minute
 
-    boolean allowed = true;
+    // local variables to be used later on
+    int j, delete_1, delete_2;
+
+    // variables that we will use in the timepicker class for example
+    static String switch_DayTime, switch_NightTime;
+    static int[] input;
+    /* entry 0: day hours
+       entry 1: day minutes
+       entry 2: night hours
+       entry 4: night minutes*/
+    static Boolean dayOrNot;
+    static String[] times;
+    /* entry 0: day hours
+       entry 1: day minutes
+       entry 2: night hours
+       entry 4: night minutes*/
+
+    boolean grant = true;
+
+    // Imagebuttons (pencils) to edit the day and night time when adding switches
     ImageButton mon_day_edit, mon_night_edit;
+
+    // Textviews to display day and night time when adding switches
     TextView mon_day_time, mon_night_time;
 
     private OnFragmentInteractionListener mListener;
@@ -78,73 +93,65 @@ public class Monday extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_monday, container, false);
-        super.onCreate(savedInstanceState);
-
-        dayTimeText = (TextView) view.findViewById(R.id.mon_day_time);
-        nightTimeText = (TextView) view.findViewById(R.id.mon_night_time);
-
-        times = new String[4];
-
-        input = new int[]{0, 0, 0, 0};
-        isDay = true;
-        displayInput(input[0], input[1]);
-        isDay = false;
-        displayInput(input[2], input[3]);
+        // makes life easier / neater when passing/ calling certain methods
+        day = "Monday";
 
         HeatingSystem.BASE_ADDRESS = "http://wwwis.win.tue.nl/2id40-ws/004";
         HeatingSystem.WEEK_PROGRAM_ADDRESS = "http://wwwis.win.tue.nl/2id40-ws/004/weekprogram";
 
-        day = "Monday";
-        dayNumber = 1;
+        /* See stackoverflo, otherwise will get errors when using findviewbyID
+        since we are extending Fragment instead of AppCompatActivity for example*/
+        View view = inflater.inflate(R.layout.fragment_monday, container, false);
+        super.onCreate(savedInstanceState);
 
+        input = new int[]{0, 0, 0, 0};
+        dayOrNot = true;
+        displayInput(input[0], input[1]);
+        dayOrNot = false;
+        displayInput(input[2], input[3]);
+        times = new String[4];
 
+        dayswitch_time = (TextView) view.findViewById(R.id.mon_day_time);
+        nightswitch_time = (TextView) view.findViewById(R.id.mon_night_time);
 
-        bMondayAdd = (Button) view.findViewById(R.id.mon_add);
-        bMondayRemoveAll = (Button)view.findViewById(R.id.mon_remove_all);
-        bMondayChange = (Button) view.findViewById(R.id.mon_change_button);
-        mondayDayTempText = (TextView)view.findViewById(R.id.mon_day_temp);
-        mondayNightTempText = (TextView)view.findViewById(R.id.mon_night_temp);
-        // mondayTitle = (TextView)getView.findViewById(R.id.mondayTitle);
-
-        // title = (TextView)findViewById(R.id.mondayTitle);
-        mondaySwitch1 = (TextView)view.findViewById(R.id.mon_switch1);
-        mondaySwitch2 = (TextView)view.findViewById(R.id.mon_switch2);
-        mondaySwitch3 = (TextView)view.findViewById(R.id.mon_switch3);
-        mondaySwitch4 = (TextView)view.findViewById(R.id.mon_switch4);
-        mondaySwitch5 = (TextView)view.findViewById(R.id.mon_switch5);
-        bMondayRemoveSwitches[0] = (ImageButton)view.findViewById(R.id.mon_trash1);
-        bMondayRemoveSwitches[1] = (ImageButton)view.findViewById(R.id.mon_trash2);
-        bMondayRemoveSwitches[2] = (ImageButton)view.findViewById(R.id.mon_trash3);
-        bMondayRemoveSwitches[3] = (ImageButton)view.findViewById(R.id.mon_trash4);
-        bMondayRemoveSwitches[4] = (ImageButton)view.findViewById(R.id.mon_trash5);
-
-        mondayDayTemp = (TextView)view.findViewById(R.id.mon_day_temp);
-        mondayNightTemp = (TextView)view.findViewById(R.id.mon_night_temp);
+        mon_switch1 = (TextView)view.findViewById(R.id.mon_switch1);
+        mon_switch2 = (TextView)view.findViewById(R.id.mon_switch2);
+        mon_switch3 = (TextView)view.findViewById(R.id.mon_switch3);
+        mon_switch4 = (TextView)view.findViewById(R.id.mon_switch4);
+        mon_switch5 = (TextView)view.findViewById(R.id.mon_switch5);
+        mon_independentSwitches[0] = (ImageButton)view.findViewById(R.id.mon_trash1);
+        mon_independentSwitches[1] = (ImageButton)view.findViewById(R.id.mon_trash2);
+        mon_independentSwitches[2] = (ImageButton)view.findViewById(R.id.mon_trash3);
+        mon_independentSwitches[3] = (ImageButton)view.findViewById(R.id.mon_trash4);
+        mon_independentSwitches[4] = (ImageButton)view.findViewById(R.id.mon_trash5);
 
         mon_day_edit = (ImageButton) view.findViewById(R.id.mon_day_edit);
         mon_day_time = (TextView) view.findViewById(R.id.mon_day_time);
-
         mon_night_edit = (ImageButton) view.findViewById(R.id.mon_night_edit);
         mon_night_time = (TextView) view.findViewById(R.id.mon_night_time);
 
+        mon_dayTemp = (TextView)view.findViewById(R.id.mon_day_temp);
+        mondayNightTemp = (TextView)view.findViewById(R.id.mon_night_temp);
 
+        mon_add = (Button) view.findViewById(R.id.mon_add);
+        mon_removeAll = (Button)view.findViewById(R.id.mon_remove_all);
+        mon_changeDayNight = (Button) view.findViewById(R.id.mon_change_button);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
+                try { // Get the day and night temperature to display in the fragment
                     dayTemp = Double.parseDouble(HeatingSystem.get("dayTemperature"));
                     nightTemp = Double.parseDouble(HeatingSystem.get("nightTemperature"));
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
-                        public void run() {
-                            mondayDayTemp.setText("Day temperature: " + dayTemp + " \u2103");
-                            mondayNightTemp.setText("Night temperature: " + nightTemp +  " \u2103");
+                        public void run() {  // setting the day and nigh temperature in the fragment
+                            mon_dayTemp.setText(dayTemp + " \u2103");
+                            mondayNightTemp.setText(nightTemp +  " \u2103");
                         }
                     });
-                    wkProgram = HeatingSystem.getWeekProgram();
-                    mondaySwitches = wkProgram.getDay("Monday");
+                    weekProgram = HeatingSystem.getWeekProgram();
+                    mondaySwitches = weekProgram.getDay("Monday");
                 } catch (Exception e) {
                     System.err.println("Error from getdata " + e);
                 }
@@ -157,12 +164,13 @@ public class Monday extends Fragment {
                 try {
                     while (!isInterrupted()) {
                         Thread.sleep(500);
-                        wkProgram = HeatingSystem.getWeekProgram();
-                        mondaySwitches = wkProgram.getDay("Monday");
+                        weekProgram = HeatingSystem.getWeekProgram();
+                        mondaySwitches = weekProgram.getDay("Monday");
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                displaySwitches();
+                                displaySwitches(); // display current switches
+                                // to do however: fix the little lag while loading
                             }
                         });
                     }
@@ -174,19 +182,23 @@ public class Monday extends Fragment {
             }
         }.start();
 
-        /* Go to activity to change day & night temperature when Change button is clicked */
-        bMondayChange.setOnClickListener(new View.OnClickListener() {
+        /* Intent to the activity where you can change the day and night temperature when clicking
+           change button underneath the displaying of the day and night temperature
+         */
+        mon_changeDayNight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(v.getContext(), DayNight_Temp_Change.class));
             }
         });
 
-        /* Set on click listener for Add button */
-        bMondayAdd.setOnClickListener(new View.OnClickListener() {
+        /* Listener for the adding of the swithes (when clicking the add switch button +
+          handling the errors with toast messages (e.g. overlap switches)
+         */
+        mon_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Make sure all input fields have 2 digit format even if user inputs fewer digits
+                // always format of two digits
                 for (int i = 0; i < times.length; i++) {
                     if (times[i].length() == 0) {
                         times[i] = "00";
@@ -194,66 +206,69 @@ public class Monday extends Fragment {
                         times[i] = "0" + times[i];
                     }
                 }
-                // Make sure new switch has acceptable switch times
-                int newDay = Integer.parseInt(times[0] + times[1], 10);
-                int newNight = Integer.parseInt(times[2] + times[3], 10);
+                // Check whether the inputted times (timepickerfragment) are acceptable in
+                int input_day = Integer.parseInt(times[0] + times[1], 10);
+                int input_night = Integer.parseInt(times[2] + times[3], 10);
                 for(int i = 0; i<5; i++) {
-                    if(wkProgram.data.get(day).get(2*i).getState()) {
+                    if(weekProgram.data.get(day).get(2*i).getState()) {
                         // Convert active switch's time to int
-                        String tmpd = wkProgram.data.get(day).get(2*i).getTime();
-                        String tmpd2 = tmpd.substring(0,2) + tmpd.substring(3,5);
-                        String tmpn = wkProgram.data.get(day).get(2*i + 1).getTime();
-                        String tmpn2 = tmpn.substring(0,2) + tmpn.substring(3,5);
-                        int oldDay = Integer.parseInt(tmpd2, 10);
-                        int oldNight = Integer.parseInt(tmpn2, 10);
-                        // Check if the new switch does not overlap with active switch
-                        if (newDay < oldDay && newNight < oldDay) {
-                            // The new switch is before the active switch.
-                        } else if (newDay > oldNight && newNight > oldNight) {
-                            // The new switch is after the active switch.
+                        String day_tmp = weekProgram.data.get(day).get(2*i).getTime();
+                        String day_tmp2 = day_tmp.substring(0,2) + day_tmp.substring(3,5);
+                        String night_tmp = weekProgram.data.get(day).get(2*i + 1).getTime();
+                        String night_tmp2 = night_tmp.substring(0,2) + night_tmp.substring(3,5);
+                        int day_old = Integer.parseInt(day_tmp2, 10);
+                        int night_old = Integer.parseInt(night_tmp2, 10);
+                        // Check wheter there is overlap in th input (timepickerfragment)
+                        if (input_day < day_old && input_night < day_old) {
+                            // the inputted switch comes before the current switch(es)
+                        } else if (input_day > night_old && input_night > night_old) {
+                            // the inputted switch comes after the current switch(es)
                         } else {
-                            // The new switch overlaps with the active switch.
-                            allowed = false;
+                            // not before or after: thus overlap with switch -> toastmessage
+                            grant = false;
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast overlap = Toast.makeText(getActivity().getApplicationContext(), "The switch was not added: a new switch can't overlap with an already active switch.", Toast.LENGTH_LONG);
+                                    Toast overlap = Toast.makeText(getActivity().getApplicationContext(), "Switch is not added. Switch overlaps with current active switches. ", Toast.LENGTH_LONG);
                                     overlap.show();
                                 }
                             });
                         }
                     }
                 }
-                // Check if the new night switch is after the new day switch
-                if (!(newDay < newNight)) {
-                    allowed = false;
+                /* Same as before, but now for the night input for the switch (check whether
+                   the night switch input comes after the day input switch (required) */
+                if (!(input_day < input_night)) {
+                    grant = false;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast night = Toast.makeText(getActivity().getApplicationContext(), "The switch was not added: the night switch must be later than the day switch.", Toast.LENGTH_LONG);
+                            Toast night = Toast.makeText(getActivity().getApplicationContext(), "Switch is not added. Please make sure that the night switch is later than the day switch.", Toast.LENGTH_LONG);
                             night.show();
                         }
                     });
                 }
-                // Concatenate strings to create a hh:mm format
-                daySwitchTime = times[0] + ":" + times[1];
-                nightSwitchTime = times[2] + ":" + times[3];
-                //add switches
+
+                // Adjust the string to the correct format hours:minutes (two digits:two digits)
+                switch_DayTime = times[0] + ":" + times[1];
+                switch_NightTime = times[2] + ":" + times[3];
+
+                // Show the switches
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            if(allowed) {
-                                setSwitch(day, daySwitchTime, nightSwitchTime);
-                            } allowed = true;
-                            HeatingSystem.setWeekProgram(wkProgram);
-                            wkProgram = HeatingSystem.getWeekProgram();
-                            mondaySwitches = wkProgram.getDay("Monday");
-                            // Display switches again
+                            if(grant) { // see org.thermostatapp.util for the method
+                                setSwitch(day, switch_DayTime, switch_NightTime);
+                            } grant = true;
+                            HeatingSystem.setWeekProgram(weekProgram);
+                            weekProgram = HeatingSystem.getWeekProgram();
+                            mondaySwitches = weekProgram.getDay("Monday");
+                            // re-display
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    displaySwitches();
+                                    displaySwitches(); // see org.thermostatapp.util for the method
                                 }
                             });
                         } catch (Exception e) {
@@ -264,22 +279,23 @@ public class Monday extends Fragment {
             }
         });
 
-        /* Set on click listener for Remove All button */
-        bMondayRemoveAll.setOnClickListener(new View.OnClickListener() {
+        /* Listener for the removal of all the swithes (when clicking the remove all button
+         */
+        mon_removeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    //Remove all switches from wkProgram
+                    //this deletes all the current switches (displayed) for this weekday
                     for (int i = 0; i < 5; i++){
-                        wkProgram.data.get(day).set(2*i, new Switch("day", false, "23:59"));
-                        wkProgram.data.get(day).set(2 * i + 1, new Switch("night", false, "23:59"));
+                        weekProgram.data.get(day).set(2*i, new Switch("day", false, "23:59"));
+                        weekProgram.data.get(day).set(2 * i + 1, new Switch("night", false, "23:59"));
                     }
-                    displaySwitches();
+                    displaySwitches(); // see org.thermostatapp.util for the method
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                HeatingSystem.setWeekProgram(wkProgram);
+                            try { // see org.thermostatapp.util for the method
+                                HeatingSystem.setWeekProgram(weekProgram);
                             } catch (Exception e) {
                                 System.out.println("Error in getdata: " + e);
                             }
@@ -291,12 +307,15 @@ public class Monday extends Fragment {
             }
         });
 
-        /* Set on click listeners for all remove buttons */
+        /* Listener for the removal of the swithes, but this time for the deleting the
+          individual swithces (insted of all) (when clicking the trash image button next
+          to the particular switch
+         */
         for(int i = 0; i < 5; i++){
-            bMondayRemoveSwitches[i].setOnClickListener(new View.OnClickListener() {
+            mon_independentSwitches[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /* Check which button was pressed */
+                    // check which imagenbutton it was
                     ImageButton clickedButton = (ImageButton) v;
                     switch (clickedButton.getId()) {
                         case R.id.mon_trash1:
@@ -315,35 +334,34 @@ public class Monday extends Fragment {
                             j=4;
                             break;
                     }
-                    remove1 = 2*j;
-                    remove2 = (2*j)+1;
-                    // Remove displayed text & icon for said switch
+                    delete_1 = 2*j;
+                    delete_2 = (2*j)+1;
+                    // make the textview invisible when deleted
                     try {
-                        bMondayRemoveSwitches[j].setVisibility(View.INVISIBLE);
+                        mon_independentSwitches[j].setVisibility(View.INVISIBLE);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                displaySwitches();
+                                displaySwitches(); // see org.thermostatapp.util for the method
                             }
                         });
                     } catch (Exception e) {
                         System.err.println("Error from getdata " + e);
                     }
-                    // Remove switch from server and upload week program to server
-                    // todo: fix this. It doesn't always remove the correct switches...
+                    // also delete it from the server + handling the weekprogram
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                wkProgram.RemoveSwitch(remove1, day);
-                                HeatingSystem.setWeekProgram(wkProgram);
-                                wkProgram = HeatingSystem.getWeekProgram();
-                                mondaySwitches = wkProgram.getDay("Monday");
+                            try { // see org.thermostatapp.util for the method
+                                weekProgram.RemoveSwitch(delete_1, day);
+                                HeatingSystem.setWeekProgram(weekProgram);
+                                weekProgram = HeatingSystem.getWeekProgram();
+                                mondaySwitches = weekProgram.getDay("Monday");
                                 // Display switches again (doesn't really work yet)
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        displaySwitches();
+                                        displaySwitches(); // see org.thermostatapp.util for the method
                                     }
                                 });
                             } catch (Exception e) {
@@ -355,42 +373,57 @@ public class Monday extends Fragment {
             });
         }
 
+        /* Listener for the editing the time of the day switch (clicking on the time textview)
+          We make use of a time picker dialog fragment (android provided)
+          to set the time (hours : minutes)
+        */
         mon_day_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getActivity().getFragmentManager(), "timePicker");
-
-                isDay = true;
+                dayOrNot = true;
             }
         });
 
+        /* Listener for the editing the time of the day switch (clicking on the edit imagebutton)
+          We make use of a time picker dialog fragment (android provided)
+          to set the time (hours : minutes)
+        */
         mon_day_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getActivity().getFragmentManager(), "timePicker");
-                isDay = true;
+                dayOrNot = true;
             }
 
         });
 
+        /* Listener for the editing the time of the night switch (clicking on the time textview)
+          We make use of a time picker dialog fragment (android provided)
+          to set the time (hours : minutes)
+        */
         mon_night_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getActivity().getFragmentManager(), "timePicker");
 
-                isDay = false;
+                dayOrNot = false;
             }
         });
 
+        /* Listener for the editing the time of the night switch (clicking on the edit imagebutton)
+          We make use of a time picker dialog fragment (android provided)
+          to set the time (hours : minutes)
+        */
         mon_night_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getActivity().getFragmentManager(), "timePicker");
-                isDay = false;
+                dayOrNot = false;
             }
 
         });
@@ -410,7 +443,7 @@ public class Monday extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mondayDayTemp.setText(dayTemp + " \u2103");
+                            mon_dayTemp.setText(dayTemp + " \u2103");
                             mondayNightTemp.setText(nightTemp + " \u2103");
                         }
                     });
@@ -426,16 +459,16 @@ public class Monday extends Fragment {
         newFragment.show(getActivity().getFragmentManager(), "timePicker");
 
         if(v.getId() == R.id.mon_day_edit || v.getId() == R.id.mon_day_time){
-            isDay = true;
+            dayOrNot = true;
         } else {
-            isDay = false;
+            dayOrNot = false;
         }
     }
 
     static void displayInput(int hourOfDay, int minute){
         String[] hourMinuteAmPm = int24HrsTo12HrsStr(hourOfDay, minute, false);
 
-        if(isDay){
+        if(dayOrNot){
             times[0] = hourMinuteAmPm[0];
             times[1] = hourMinuteAmPm[1];
         } else {
@@ -445,25 +478,11 @@ public class Monday extends Fragment {
 
         hourMinuteAmPm = int24HrsTo12HrsStr(hourOfDay, minute, true);
 
-        if(isDay){
-            dayTimeText.setText(hourMinuteAmPm[0]+":"+hourMinuteAmPm[1]+" "+hourMinuteAmPm[2]);
+        if(dayOrNot){
+            dayswitch_time.setText(hourMinuteAmPm[0]+":"+hourMinuteAmPm[1]+" "+hourMinuteAmPm[2]);
         } else {
-            nightTimeText.setText(hourMinuteAmPm[0]+":"+hourMinuteAmPm[1]+" "+hourMinuteAmPm[2]);
+            nightswitch_time.setText(hourMinuteAmPm[0]+":"+hourMinuteAmPm[1]+" "+hourMinuteAmPm[2]);
         }
-
-        /*} else {
-            if ((hourOfDay < 10) && ((Integer.parseInt(minuteStr) < 10))) {
-                dayTimeText.setText("0"+hourOfDay+":"+"0"+minuteStr+" "+amPm);
-            } else if ((hourOfDay < 10) && !((Integer.parseInt(minuteStr) < 10))) {
-                dayTimeText.setText("0"+hourOfDay+":"+minuteStr+" "+amPm);
-            } else if (!(hourOfDay < 10) && ((Integer.parseInt(minuteStr) < 10))) {
-                dayTimeText.setText(hourOfDay+":"+"0"+minuteStr+" "+amPm);
-            } else {
-                dayTimeText.setText(hourOfDay+":"+minuteStr+" "+amPm);
-            }
-
-        }*/
-        // Inflate the layout for this fragment
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -508,12 +527,12 @@ public class Monday extends Fragment {
             String hourMinuteNight = mondaySwitches.get(1).getTime();
             int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
             String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mondaySwitch1.setText("1) " + mondaySwitches.get(0).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(1).getType() + ": "
+            mon_switch1.setText("1) " + mondaySwitches.get(0).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(1).getType() + ": "
                     + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            bMondayRemoveSwitches[0].setVisibility(View.VISIBLE); // makes button appear
+            mon_independentSwitches[0].setVisibility(View.VISIBLE); // makes button appear
         } else {
-            mondaySwitch1.setText("");
-            bMondayRemoveSwitches[0].setVisibility(View.INVISIBLE); // makes button appear
+            mon_switch1.setText("");
+            mon_independentSwitches[0].setVisibility(View.INVISIBLE); // makes button appear
         }
         if (mondaySwitches.get(2).getState()) {
             String hourMinuteDay = mondaySwitches.get(2).getTime();
@@ -522,12 +541,12 @@ public class Monday extends Fragment {
             String hourMinuteNight = mondaySwitches.get(3).getTime();
             int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
             String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mondaySwitch2.setText("2) " + mondaySwitches.get(2).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(3).getType() + ": "
+            mon_switch2.setText("2) " + mondaySwitches.get(2).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(3).getType() + ": "
                     + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            bMondayRemoveSwitches[1].setVisibility(View.VISIBLE); // makes button appear
+            mon_independentSwitches[1].setVisibility(View.VISIBLE); // makes button appear
         } else {
-            mondaySwitch2.setText("");
-            bMondayRemoveSwitches[1].setVisibility(View.INVISIBLE); // makes button appear
+            mon_switch2.setText("");
+            mon_independentSwitches[1].setVisibility(View.INVISIBLE); // makes button appear
         }
         if (mondaySwitches.get(4).getState()) {
             String hourMinuteDay = mondaySwitches.get(4).getTime();
@@ -536,12 +555,12 @@ public class Monday extends Fragment {
             String hourMinuteNight = mondaySwitches.get(5).getTime();
             int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
             String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mondaySwitch3.setText("3) " + mondaySwitches.get(4).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(5).getType() + ": "
+            mon_switch3.setText("3) " + mondaySwitches.get(4).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(5).getType() + ": "
                     + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            bMondayRemoveSwitches[2].setVisibility(View.VISIBLE); // makes button appear
+            mon_independentSwitches[2].setVisibility(View.VISIBLE); // makes button appear
         } else {
-            mondaySwitch3.setText("");
-            bMondayRemoveSwitches[2].setVisibility(View.INVISIBLE); // makes button appear
+            mon_switch3.setText("");
+            mon_independentSwitches[2].setVisibility(View.INVISIBLE); // makes button appear
         }
         if (mondaySwitches.get(6).getState()) {
             String hourMinuteDay = mondaySwitches.get(6).getTime();
@@ -550,12 +569,12 @@ public class Monday extends Fragment {
             String hourMinuteNight = mondaySwitches.get(7).getTime();
             int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
             String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mondaySwitch4.setText("4) " + mondaySwitches.get(6).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(7).getType() + ": "
+            mon_switch4.setText("4) " + mondaySwitches.get(6).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(7).getType() + ": "
                     + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            bMondayRemoveSwitches[3].setVisibility(View.VISIBLE); // makes button appear
+            mon_independentSwitches[3].setVisibility(View.VISIBLE); // makes button appear
         } else {
-            mondaySwitch4.setText("");
-            bMondayRemoveSwitches[3].setVisibility(View.INVISIBLE); // makes button appear
+            mon_switch4.setText("");
+            mon_independentSwitches[3].setVisibility(View.INVISIBLE); // makes button appear
         }
         if (mondaySwitches.get(8).getState()) {
             String hourMinuteDay = mondaySwitches.get(8).getTime();
@@ -564,12 +583,12 @@ public class Monday extends Fragment {
             String hourMinuteNight = mondaySwitches.get(9).getTime();
             int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
             String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mondaySwitch5.setText("5) " + mondaySwitches.get(8).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(9).getType() + ": "
+            mon_switch5.setText("5) " + mondaySwitches.get(8).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(9).getType() + ": "
                     + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            bMondayRemoveSwitches[4].setVisibility(View.VISIBLE); // makes button appear
+            mon_independentSwitches[4].setVisibility(View.VISIBLE); // makes button appear
         } else {
-            mondaySwitch5.setText("");
-            bMondayRemoveSwitches[4].setVisibility(View.INVISIBLE); // makes button appear
+            mon_switch5.setText("");
+            mon_independentSwitches[4].setVisibility(View.INVISIBLE); // makes button appear
         }
     }
 
@@ -618,7 +637,7 @@ public class Monday extends Fragment {
     /* Add a day and a night switch to the array for a specified day */
     public void setSwitch(String day, String dayTime, String nightTime) {
         // If 5 switches are already enabled, tell the user no more switches can be added.
-        if (wkProgram.data.get(day).get(8).getState()) {
+        if (weekProgram.data.get(day).get(8).getState()) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -629,10 +648,10 @@ public class Monday extends Fragment {
         }
         for (int i=0; i<5; i++) {
             // Find an OFF pair
-            if (!wkProgram.data.get(day).get(2*i).getState()) {
+            if (!weekProgram.data.get(day).get(2*i).getState()) {
                 // Set the OFF pair to be the new switch.
-                wkProgram.data.get(day).set(2*i, new Switch("day", true, dayTime));
-                wkProgram.data.get(day).set(2*i + 1, new Switch("night", true, nightTime));
+                weekProgram.data.get(day).set(2*i, new Switch("day", true, dayTime));
+                weekProgram.data.get(day).set(2*i + 1, new Switch("night", true, nightTime));
                 // When the last switch has been added, tell the user no more switches can be added.
                 if(i==4) {
                     getActivity().runOnUiThread(new Runnable() {
