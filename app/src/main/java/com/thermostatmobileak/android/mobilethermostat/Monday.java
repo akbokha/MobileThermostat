@@ -32,7 +32,7 @@ public class Monday extends Fragment {
 
     /* Arraylist for the switches for Monday and The initializations of the textviews for the
        switches in the layout for the monday switches */
-    public ArrayList<Switch> mondaySwitches;
+    public ArrayList<Switch> mon_switches;
     TextView mon_switch1, mon_switch2, mon_switch3, mon_switch4, mon_switch5;
 
     // Textviews for displaying the day and night temperature in the weekday fragment
@@ -106,9 +106,9 @@ public class Monday extends Fragment {
 
         input = new int[]{0, 0, 0, 0};
         dayOrNot = true;
-        displayInput(input[0], input[1]);
+        show_input(input[0], input[1]);
         dayOrNot = false;
-        displayInput(input[2], input[3]);
+        show_input(input[2], input[3]);
         times = new String[4];
 
         dayswitch_time = (TextView) view.findViewById(R.id.mon_day_time);
@@ -151,7 +151,7 @@ public class Monday extends Fragment {
                         }
                     });
                     weekProgram = HeatingSystem.getWeekProgram();
-                    mondaySwitches = weekProgram.getDay("Monday");
+                    mon_switches = weekProgram.getDay("Monday");
                 } catch (Exception e) {
                     System.err.println("Error from getdata " + e);
                 }
@@ -165,11 +165,11 @@ public class Monday extends Fragment {
                     while (!isInterrupted()) {
                         Thread.sleep(500);
                         weekProgram = HeatingSystem.getWeekProgram();
-                        mondaySwitches = weekProgram.getDay("Monday");
+                        mon_switches = weekProgram.getDay("Monday");
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                displaySwitches(); // display current switches
+                                show_max5_switches(); // display current switches
                                 // to do however: fix the little lag while loading
                             }
                         });
@@ -263,12 +263,12 @@ public class Monday extends Fragment {
                             } grant = true;
                             HeatingSystem.setWeekProgram(weekProgram);
                             weekProgram = HeatingSystem.getWeekProgram();
-                            mondaySwitches = weekProgram.getDay("Monday");
+                            mon_switches = weekProgram.getDay("Monday");
                             // re-display
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    displaySwitches(); // see org.thermostatapp.util for the method
+                                    show_max5_switches(); // see org.thermostatapp.util for the method
                                 }
                             });
                         } catch (Exception e) {
@@ -290,7 +290,7 @@ public class Monday extends Fragment {
                         weekProgram.data.get(day).set(2*i, new Switch("day", false, "23:59"));
                         weekProgram.data.get(day).set(2 * i + 1, new Switch("night", false, "23:59"));
                     }
-                    displaySwitches(); // see org.thermostatapp.util for the method
+                    show_max5_switches(); // see org.thermostatapp.util for the method
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -318,31 +318,31 @@ public class Monday extends Fragment {
                     // check which imagenbutton it was
                     ImageButton clickedButton = (ImageButton) v;
                     switch (clickedButton.getId()) {
-                        case R.id.mon_trash1:
+                        case R.id.mon_trash1: // trash imagebutton for first switch
                             j = 0;
                             break;
-                        case R.id.mon_trash2:
+                        case R.id.mon_trash2: // trash  imagebutton for second switch
                             j = 1;
                             break;
-                        case R.id.mon_trash3:
+                        case R.id.mon_trash3:  // trash imagebutton for third switch
                             j = 2;
                             break;
-                        case R.id.mon_trash4:
+                        case R.id.mon_trash4: // trash imagebutton for fourth switch
                             j = 3;
                             break;
-                        case R.id.mon_trash5:
+                        case R.id.mon_trash5: // trash imagebutton for fifth switch
                             j=4;
                             break;
                     }
                     delete_1 = 2*j;
                     delete_2 = (2*j)+1;
-                    // make the textview invisible when deleted
+                    // make the textview invisible when deleted (in the layout)
                     try {
                         mon_independentSwitches[j].setVisibility(View.INVISIBLE);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                displaySwitches(); // see org.thermostatapp.util for the method
+                                show_max5_switches(); // see org.thermostatapp.util for the method
                             }
                         });
                     } catch (Exception e) {
@@ -356,12 +356,12 @@ public class Monday extends Fragment {
                                 weekProgram.RemoveSwitch(delete_1, day);
                                 HeatingSystem.setWeekProgram(weekProgram);
                                 weekProgram = HeatingSystem.getWeekProgram();
-                                mondaySwitches = weekProgram.getDay("Monday");
+                                mon_switches = weekProgram.getDay("Monday");
                                 // Display switches again (doesn't really work yet)
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        displaySwitches(); // see org.thermostatapp.util for the method
+                                        show_max5_switches(); // see org.thermostatapp.util for the method
                                     }
                                 });
                             } catch (Exception e) {
@@ -431,18 +431,24 @@ public class Monday extends Fragment {
         return view;
     }
 
-    /* Reload day & night temperature when the day activity is revisited */
+    // End of onCreateView method
+
+    /* onresume method. We reload things like the day and night temperature when the activity is
+    revisited. It could for example be the case that we went to the change temperature activity (or
+    to the main and via there to change day/night temperature) and back.
+    The day and night temperature can therefore be changed.
+     */
     public void onResume() {
         super.onResume();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
+                try { // (re-)fetch the day and night temppature
                     dayTemp = Double.parseDouble(HeatingSystem.get("dayTemperature"));
                     nightTemp = Double.parseDouble(HeatingSystem.get("nightTemperature"));
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
-                        public void run() {
+                        public void run() { // set the (new) day and night temperature in the layout
                             mon_dayTemp.setText(dayTemp + " \u2103");
                             mondayNightTemp.setText(nightTemp + " \u2103");
                         }
@@ -454,50 +460,43 @@ public class Monday extends Fragment {
         }).start();
     }
 
-    public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getActivity().getFragmentManager(), "timePicker");
-
-        if(v.getId() == R.id.mon_day_edit || v.getId() == R.id.mon_day_time){
-            dayOrNot = true;
-        } else {
-            dayOrNot = false;
-        }
-    }
-
-    static void displayInput(int hourOfDay, int minute){
-        String[] hourMinuteAmPm = int24HrsTo12HrsStr(hourOfDay, minute, false);
+    static void show_input(int hours, int minute){
+        String[] hour_minutes = int_conversion_24to12(hours, minute, false);
 
         if(dayOrNot){
-            times[0] = hourMinuteAmPm[0];
-            times[1] = hourMinuteAmPm[1];
+            times[0] = hour_minutes[0];
+            times[1] = hour_minutes[1];
         } else {
-            times[2] = hourMinuteAmPm[0];
-            times[3] = hourMinuteAmPm[1];
+            times[2] = hour_minutes[0];
+            times[3] = hour_minutes[1];
         }
-
-        hourMinuteAmPm = int24HrsTo12HrsStr(hourOfDay, minute, true);
+        hour_minutes = int_conversion_24to12(hours, minute, true);
 
         if(dayOrNot){
-            dayswitch_time.setText(hourMinuteAmPm[0]+":"+hourMinuteAmPm[1]+" "+hourMinuteAmPm[2]);
+            dayswitch_time.setText(hour_minutes[0]+":"+hour_minutes[1]+" "+hour_minutes[2]);
         } else {
-            nightswitch_time.setText(hourMinuteAmPm[0]+":"+hourMinuteAmPm[1]+" "+hourMinuteAmPm[2]);
+            nightswitch_time.setText(hour_minutes[0]+":"+hour_minutes[1]+" "+hour_minutes[2]);
         }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
+    // This method is provided since we use fragments for the weekdays
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    // This method is provided since we use fragments for the weekdays.
+    // We need to override this method to inherit from Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
     }
 
+    // This method is provided since we use fragments for the weekdays.
+    // We need to override this method to inherit from Fragment
     @Override
     public void onDetach() {
         super.onDetach();
@@ -514,85 +513,94 @@ public class Monday extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+
+    // This method is provided since we use fragments for the weekdays.
+    // We need to override this method to inherit from Fragment
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
-    void displaySwitches(){
-        if (mondaySwitches.get(0).getState()) {
-            String hourMinuteDay = mondaySwitches.get(0).getTime();
-            int[] intHourMinuteDay = Hrs24StrToInt(hourMinuteDay);
-            String[] strArrHourMinuteDay = int24HrsTo12HrsStr(intHourMinuteDay[0], intHourMinuteDay[1], true);
-            String hourMinuteNight = mondaySwitches.get(1).getTime();
-            int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
-            String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mon_switch1.setText("1) " + mondaySwitches.get(0).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(1).getType() + ": "
-                    + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            mon_independentSwitches[0].setVisibility(View.VISIBLE); // makes button appear
+    // method that gets called when e.g. adding switches
+    // Concatenate strings for the layout with correct information
+    // + set visibility right in different cases (see if/else construction)
+    void show_max5_switches(){ // first switch
+        if (mon_switches.get(0).getState()) {
+            String day_hours_minutes = mon_switches.get(0).getTime();
+            int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
+            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String night_hours_minutes = mon_switches.get(1).getTime();
+            int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
+            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
+            mon_switch1.setText("1. " + mon_switches.get(0).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + mon_switches.get(1).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            mon_independentSwitches[0].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             mon_switch1.setText("");
-            mon_independentSwitches[0].setVisibility(View.INVISIBLE); // makes button appear
+            mon_independentSwitches[0].setVisibility(View.INVISIBLE); // it becomes invisible in the layout
         }
-        if (mondaySwitches.get(2).getState()) {
-            String hourMinuteDay = mondaySwitches.get(2).getTime();
-            int[] intHourMinuteDay = Hrs24StrToInt(hourMinuteDay);
-            String[] strArrHourMinuteDay = int24HrsTo12HrsStr(intHourMinuteDay[0], intHourMinuteDay[1], true);
-            String hourMinuteNight = mondaySwitches.get(3).getTime();
-            int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
-            String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mon_switch2.setText("2) " + mondaySwitches.get(2).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(3).getType() + ": "
-                    + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            mon_independentSwitches[1].setVisibility(View.VISIBLE); // makes button appear
+        if (mon_switches.get(2).getState()) { // second switch
+            String day_hours_minutes = mon_switches.get(2).getTime();
+            int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
+            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String night_hours_minutes = mon_switches.get(3).getTime();
+            int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
+            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
+            mon_switch2.setText("2. " + mon_switches.get(2).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + mon_switches.get(3).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            mon_independentSwitches[1].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             mon_switch2.setText("");
-            mon_independentSwitches[1].setVisibility(View.INVISIBLE); // makes button appear
+            mon_independentSwitches[1].setVisibility(View.INVISIBLE); // it becomes invisible in the layout
         }
-        if (mondaySwitches.get(4).getState()) {
-            String hourMinuteDay = mondaySwitches.get(4).getTime();
-            int[] intHourMinuteDay = Hrs24StrToInt(hourMinuteDay);
-            String[] strArrHourMinuteDay = int24HrsTo12HrsStr(intHourMinuteDay[0], intHourMinuteDay[1], true);
-            String hourMinuteNight = mondaySwitches.get(5).getTime();
-            int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
-            String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mon_switch3.setText("3) " + mondaySwitches.get(4).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(5).getType() + ": "
-                    + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            mon_independentSwitches[2].setVisibility(View.VISIBLE); // makes button appear
+        if (mon_switches.get(4).getState()) { // third switch
+            String day_hours_minutes = mon_switches.get(4).getTime();
+            int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
+            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String night_hours_minutes = mon_switches.get(5).getTime();
+            int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
+            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
+            mon_switch3.setText("3. " + mon_switches.get(4).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + mon_switches.get(5).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            mon_independentSwitches[2].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             mon_switch3.setText("");
-            mon_independentSwitches[2].setVisibility(View.INVISIBLE); // makes button appear
+            mon_independentSwitches[2].setVisibility(View.INVISIBLE); // it becomes invisible in the layout
         }
-        if (mondaySwitches.get(6).getState()) {
-            String hourMinuteDay = mondaySwitches.get(6).getTime();
-            int[] intHourMinuteDay = Hrs24StrToInt(hourMinuteDay);
-            String[] strArrHourMinuteDay = int24HrsTo12HrsStr(intHourMinuteDay[0], intHourMinuteDay[1], true);
-            String hourMinuteNight = mondaySwitches.get(7).getTime();
-            int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
-            String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mon_switch4.setText("4) " + mondaySwitches.get(6).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(7).getType() + ": "
-                    + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            mon_independentSwitches[3].setVisibility(View.VISIBLE); // makes button appear
+        if (mon_switches.get(6).getState()) { // fourt switch
+            String day_hours_minutes = mon_switches.get(6).getTime();
+            int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
+            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String night_hours_minutes = mon_switches.get(7).getTime();
+            int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
+            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
+            mon_switch4.setText("4. " + mon_switches.get(6).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + mon_switches.get(7).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            mon_independentSwitches[3].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             mon_switch4.setText("");
-            mon_independentSwitches[3].setVisibility(View.INVISIBLE); // makes button appear
+            mon_independentSwitches[3].setVisibility(View.INVISIBLE); // it becomes invisible in the layout
         }
-        if (mondaySwitches.get(8).getState()) {
-            String hourMinuteDay = mondaySwitches.get(8).getTime();
-            int[] intHourMinuteDay = Hrs24StrToInt(hourMinuteDay);
-            String[] strArrHourMinuteDay = int24HrsTo12HrsStr(intHourMinuteDay[0], intHourMinuteDay[1], true);
-            String hourMinuteNight = mondaySwitches.get(9).getTime();
-            int[] intHourMinuteNight = Hrs24StrToInt(hourMinuteNight);
-            String[] strArrHourMinuteNight = int24HrsTo12HrsStr(intHourMinuteNight[0], intHourMinuteNight[1], true);
-            mon_switch5.setText("5) " + mondaySwitches.get(8).getType() + ": " + strArrHourMinuteDay[0]+":"+strArrHourMinuteDay[1]+" "+strArrHourMinuteDay[2] + ", " + mondaySwitches.get(9).getType() + ": "
-                    + strArrHourMinuteNight[0]+":"+strArrHourMinuteNight[1]+" "+strArrHourMinuteNight[2] + " ");
-            mon_independentSwitches[4].setVisibility(View.VISIBLE); // makes button appear
+        if (mon_switches.get(8).getState()) { // fifth switch
+            String day_hours_minutes = mon_switches.get(8).getTime();
+            int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
+            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String night_hours_minutes = mon_switches.get(9).getTime();
+            int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
+            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
+            mon_switch5.setText("5. " + mon_switches.get(8).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + mon_switches.get(9).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            mon_independentSwitches[4].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             mon_switch5.setText("");
-            mon_independentSwitches[4].setVisibility(View.INVISIBLE); // makes button appear
+            mon_independentSwitches[4].setVisibility(View.INVISIBLE); // it becomes invisible in the layout
         }
     }
 
-    static String[] int24HrsTo12HrsStr(int hour, int minute, boolean min12) {
+    // Method that convers the time to the right output format
+    // We use the 12-AM-PM format in our code / layout / app
+    // This method can be found online (even though the logic is not hard)
+    static String[] int_conversion_24to12(int hour, int minute, boolean checkIf_12) {
         String amPm = "AM";
         String minuteStr = String.valueOf(minute);
 
@@ -602,7 +610,8 @@ public class Monday extends Fragment {
             minuteStr = "0"+String.valueOf(minute);
         }
 
-        if(min12){
+        // We now switch to PM, since we are past noon
+        if(checkIf_12){
             if(hour >= 13){
                 hour -= 12;
                 amPm = "PM";
@@ -619,46 +628,55 @@ public class Monday extends Fragment {
             hourStr = "0"+String.valueOf(hour);
         }
 
-        String[] hourMinuteAmPm = new String[]{hourStr, minuteStr, amPm};
-        return hourMinuteAmPm;
+        String[] hour_minutes = new String[]{hourStr, minuteStr, amPm};
+        return hour_minutes;
     }
 
-    int[] Hrs24StrToInt(String hourMinute) {
-        String hour = hourMinute.substring(0,2);
-        String minute = hourMinute.substring(3,5);
+    // Method that we use for conversion to an integer (from the string)
+    int[] to_int_conversion_24hrs(String hourMinute) {
+        String hours = hourMinute.substring(0,2); // get hours
+        String minutes = hourMinute.substring(3,5); // get minutes
 
-        int intHour = Integer.parseInt(hour);
-        int intMinute = Integer.parseInt(minute);
+        int int_hours = Integer.parseInt(hours); // parse to an integer
+        int int_minutes = Integer.parseInt(minutes); // parse to an integer
 
-        int[] hourMin = new int[]{intHour, intMinute};
-        return hourMin;
+        int[] hours_minutes = new int[]{int_hours, int_minutes}; // make array of length two with
+        // the two integer values for hours and minutes
+        return hours_minutes; // return this array to be used further on
     }
 
-    /* Add a day and a night switch to the array for a specified day */
+    /* For each weekday we can set the day and night switch with this method
+     + error handling and user feedback with toast-messages to notify the user when swithces
+     are not added and why they are not added
+    */
     public void setSwitch(String day, String dayTime, String nightTime) {
-        // If 5 switches are already enabled, tell the user no more switches can be added.
+   // Notify the user that the maximum amount of switches (5) has been reached
         if (weekProgram.data.get(day).get(8).getState()) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast maxSwitchesAdded = Toast.makeText(getActivity().getApplicationContext(), "The switch was not added: you can't add more than 5 switches.", Toast.LENGTH_LONG);
-                    maxSwitchesAdded.show();
+                    Toast toast_max_switches5 = Toast.makeText(getActivity().getApplicationContext(), "Switch is not added. You can add a maximum of 5 switches per weekday", Toast.LENGTH_LONG);
+                    toast_max_switches5.show(); // display the toast: length long
                 }
             });
         }
-        for (int i=0; i<5; i++) {
-            // Find an OFF pair
+        for (int i=0; i<5; i++) { // max 5 switches, therefore <
+            // Search the off pair
             if (!weekProgram.data.get(day).get(2*i).getState()) {
-                // Set the OFF pair to be the new switch.
+                // same for new switch
                 weekProgram.data.get(day).set(2*i, new Switch("day", true, dayTime));
                 weekProgram.data.get(day).set(2*i + 1, new Switch("night", true, nightTime));
-                // When the last switch has been added, tell the user no more switches can be added.
+                /* This is rather error prevention than error handling. We notify the user
+                that at this moment 5 switches have been added. The user will now know (if it is
+                not a newby) that he can not add any more switches -> this will prevent him/her
+                of adding another one (other toast message will then not be displayed)
+                 */
                 if(i==4) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast maxSwitchesAdded = Toast.makeText(getActivity().getApplicationContext(), "You've now added the maximum of 5 switches.", Toast.LENGTH_LONG);
-                            maxSwitchesAdded.show();
+                            Toast toast_max_switches5 = Toast.makeText(getActivity().getApplicationContext(), "You've now added the maximum of 5 switches.", Toast.LENGTH_LONG);
+                            toast_max_switches5.show(); // display the toast: length long
                         }
                     });
                 }
