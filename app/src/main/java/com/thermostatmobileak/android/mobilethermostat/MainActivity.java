@@ -1,5 +1,7 @@
 package com.thermostatmobileak.android.mobilethermostat;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.CountDownTimer;
 import android.provider.ContactsContract;
 import android.support.annotation.DrawableRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 
@@ -276,40 +279,22 @@ public class MainActivity extends AppCompatActivity  {
         }.start();
 
 
-        /*
+
         // Info button listener
         info_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        day_temp_home.setVisibility(View.INVISIBLE);
-                        night_temp_home.setVisibility(View.INVISIBLE);
-                        change_button.setVisibility(View.INVISIBLE);
-                       // infoText.setVisibility(View.VISIBLE);
-                       // close.setVisibility(View.VISIBLE);
-                    }
-                });
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(v.getContext(), R.style.AppCompatAlertDialogStyle);
+                builder.setTitle("Week Program Info");
+                builder.setMessage(R.string.info_home_weekprogram);
+                builder.setPositiveButton("Go Back", null);
+                builder.show();
+
             }
         });
 
-        // Close button listener
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        infoText.setVisibility(View.INVISIBLE);
-                        close.setVisibility(View.INVISIBLE);
-                        dayTempHome.setVisibility(View.VISIBLE);
-                        nightTempHome.setVisibility(View.VISIBLE);
-                        bChangeHome.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        }); */
+
 
         // Increase temperature button listener
         plus_button.setOnClickListener(new View.OnClickListener() {
