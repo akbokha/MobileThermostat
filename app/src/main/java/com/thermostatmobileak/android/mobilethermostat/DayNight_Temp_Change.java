@@ -3,6 +3,7 @@ package com.thermostatmobileak.android.mobilethermostat;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devadvance.circularseekbar.CircularSeekBar;
 
@@ -170,8 +172,13 @@ public class DayNight_Temp_Change extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_info) {
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Day and Night Temperature Info");
+            builder.setMessage(R.string.info_daynight);
+            builder.setPositiveButton("Go Back", null);
+            builder.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -252,34 +259,33 @@ public class DayNight_Temp_Change extends AppCompatActivity {
     public void max_and_min(){
         if (day_temp == 30) {
             plus_day.setClickable(false);
-            plus_day.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            plus_day.setImageResource(R.drawable.up_fill96_grey);
             minus_day.setClickable(true);
-            minus_day.getBackground().setColorFilter(null);
         } else if (day_temp == 5) {
             plus_day.setClickable(true);
             minus_day.setClickable(false);
-            minus_day.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            minus_day.setImageResource(R.drawable.down_fill96_grey);
         } else {
             plus_day.setClickable(true);
-            plus_day.getBackground().setColorFilter(null);
+            plus_day.setImageResource(R.drawable.up_fill96);
             minus_day.setClickable(true);
-            minus_day.getBackground().setColorFilter(null);
+            minus_day.setImageResource(R.drawable.down_fill96);
         }
 
         if (night_temp == 30) {
             plus_night.setClickable(false);
-            plus_night.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            plus_night.setImageResource(R.drawable.up_fill96_grey);
             minus_night.setClickable(true);
             minus_night.getBackground().setColorFilter(null);
         } else if (night_temp == 5) {
             plus_night.setClickable(true);
             minus_night.setClickable(false);
-            minus_night.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+            minus_night.setImageResource(R.drawable.down_fill96_grey);
         } else {
             plus_night.setClickable(true);
-            plus_night.getBackground().setColorFilter(null);
+            plus_night.setImageResource(R.drawable.up_fill96);
             minus_night.setClickable(true);
-            minus_night.getBackground().setColorFilter(null);
+            minus_night.setImageResource(R.drawable.down_fill96);
         }
     }
 
@@ -306,5 +312,11 @@ public class DayNight_Temp_Change extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        Toast toast_changes_saved = Toast.makeText(getApplicationContext(), "Day and night temperature change(s) are saved", Toast.LENGTH_SHORT);
+        toast_changes_saved.show(); // display the toast: length long
     }
 }

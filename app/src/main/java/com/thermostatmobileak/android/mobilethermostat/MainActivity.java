@@ -456,18 +456,17 @@ public class MainActivity extends AppCompatActivity  {
     public void max_and_min() {
             if (des_temp == 30) {
                 plus_button.setClickable(false);
-                plus_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+                plus_button.setImageResource(R.drawable.up_fill96_grey);
                 minus_button.setClickable(true);
-                minus_button.getBackground().setColorFilter(null);
             } else if (des_temp == 5) {
                 minus_button.setClickable(false);
-                minus_button.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+                minus_button.setImageResource(R.drawable.down_fill96_grey);
                 plus_button.setClickable(true);
             } else {
                 minus_button.setClickable(true);
-                minus_button.getBackground().setColorFilter(null);
+                minus_button.setImageResource(R.drawable.down_fill96);
                 plus_button.setClickable(true);
-                plus_button.getBackground().setColorFilter(null);
+                plus_button.setImageResource(R.drawable.up_fill96);
             }
     }
 
@@ -503,6 +502,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    // method for the three dots menu in the app activity bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -510,6 +510,7 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
+    // method that handles the action in the three dots menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -518,8 +519,13 @@ public class MainActivity extends AppCompatActivity  {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_info) {
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Homescreen Info");
+            builder.setMessage(R.string.info_home);
+            builder.setPositiveButton("Go Back", null);
+            builder.show();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">Mobile Thermostat</string>
-    <string name="settings">Settings</string>
+    <string name="info">Info</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="info_home">On the screen there are multiple aspects, including the desired and current temperature, the week program, the status of connection with the thermostat and the day and night temperatures. Per aspect more information will be provided about the functionality. This page will give information concerning the functioning of the different components of the interface.</string>
     <string name="info_home_weekprogram">If the week program is unchecked the desired temperature will be the temperature until the week program is put on again and the first switch of the week program is reached.</string>
+    <string name="info_daynight">This page allows the changing of the day and night temperature that will be used in the week program. The day and night temperature can be altered by sliding the circular seekbar or by pressing the up and down button next to the circular seekbar. The circular seekbar will allow changing with big steps whereas the buttons can be used to change by + or - 0.1. By holding the up or down button longer  it will still only increase by 0.1. If the temperature is changed this will automatically be saved, and will change the temperatures of day and night which are used in the week program. </string>
+    <string name="info_week_program">The week program is a program that allows presets in the temperature changes during the days (monday to sunday) of a week. On this page there is the possibility to set  and remove switches and view the day and night temperatures. The week program can be set by setting switches.</string>
 </resources>

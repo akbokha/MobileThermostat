@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".ThermostatActivity"
    xmlns:MobileThermostat="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_settings" android:title="@string/settings"
+    <item android:id="@+id/action_info" android:title="@string/info"
         android:orderInCategory="100" MobileThermostat:showAsAction="never" />
 </menu>
 

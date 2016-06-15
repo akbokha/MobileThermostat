@@ -2,10 +2,12 @@ package com.thermostatmobileak.android.mobilethermostat;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -231,7 +233,7 @@ public class Wednesday extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast overlap = Toast.makeText(getActivity().getApplicationContext(), "Switch is not added. Switch overlaps with current active switches. ", Toast.LENGTH_LONG);
+                                    Toast overlap = Toast.makeText(getActivity().getApplicationContext(), "Switch is not added. Switch overlaps with current active switches. ", Toast.LENGTH_SHORT);
                                     overlap.show();
                                 }
                             });
@@ -245,7 +247,7 @@ public class Wednesday extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast night = Toast.makeText(getActivity().getApplicationContext(), "Switch is not added. Please make sure that the night switch is later than the day switch.", Toast.LENGTH_LONG);
+                            Toast night = Toast.makeText(getActivity().getApplicationContext(), "Switch is not added. Please make sure that the night switch is later than the day switch.", Toast.LENGTH_SHORT);
                             night.show();
                         }
                     });
@@ -287,22 +289,35 @@ public class Wednesday extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    //this deletes all the current switches (displayed) for this weekday
-                    for (int i = 0; i < 5; i++){
-                        weekProgram.data.get(day).set(2*i, new Switch("day", false, "23:59"));
-                        weekProgram.data.get(day).set(2 * i + 1, new Switch("night", false, "23:59"));
-                    }
-                    show_max5_switches(); // see org.thermostatapp.util for the method
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try { // see org.thermostatapp.util for the method
-                                HeatingSystem.setWeekProgram(weekProgram);
-                            } catch (Exception e) {
-                                System.out.println("Error in getdata: " + e);
+
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(v.getContext(), R.style.AppCompatAlertDialogStyle);
+                    builder.setTitle("Confirmation Deletion Switches");
+                    builder.setMessage("Are you sure you want to delete all the switches?");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            //this deletes all the current switches (displayed) for this weekday
+                            for (int i = 0; i < 5; i++){
+                                weekProgram.data.get(day).set(2*i, new Switch("day", false, "23:59"));
+                                weekProgram.data.get(day).set(2 * i + 1, new Switch("night", false, "23:59"));
                             }
-                        }
-                    }).start();
+                            show_max5_switches(); // see org.thermostatapp.util for the method
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try { // see org.thermostatapp.util for the method
+                                        HeatingSystem.setWeekProgram(weekProgram);
+                                    } catch (Exception e) {
+                                        System.out.println("Error in getdata: " + e);
+                                    }
+                                }
+                            }).start();
+                            dialog.dismiss();
+                        }  } );
+                    builder.setNegativeButton("No",null);
+                    builder.show();
+
                 } catch (Exception e) {
                     System.err.println("Error from getdata 2 " + e);
                 }
@@ -463,21 +478,46 @@ public class Wednesday extends Fragment {
     }
 
     static void show_input(int hours, int minute){
-        String[] hour_minutes = int_conversion_24to12(hours, minute, false);
 
-        if(dayOrNot){
-            times[0] = hour_minutes[0];
-            times[1] = hour_minutes[1];
-        } else {
-            times[2] = hour_minutes[0];
-            times[3] = hour_minutes[1];
+        boolean hours_lessThan10;
+        if(hours < 10) {
+            hours_lessThan10 = true;
         }
-        hour_minutes = int_conversion_24to12(hours, minute, true);
+        else {
+            hours_lessThan10 = false;
+        }
+
+        boolean minutes_lessThan10;
+        if(minute < 10) {
+            minutes_lessThan10 = true;
+        }
+        else {
+            minutes_lessThan10 = false;
+        }
+
+        String str_hours = String.valueOf(hours);
+        String str_minutes = String.valueOf(minute);
+
+        if (hours_lessThan10){
+            str_hours = 0 + str_hours;
+        }
+
+        if (minutes_lessThan10){
+            str_minutes = 0 + str_minutes;
+        }
 
         if(dayOrNot){
-            dayswitch_time.setText(hour_minutes[0]+":"+hour_minutes[1]+" "+hour_minutes[2]);
+            times[0] = str_hours;
+            times[1] = str_minutes;
         } else {
-            nightswitch_time.setText(hour_minutes[0]+":"+hour_minutes[1]+" "+hour_minutes[2]);
+            times[2] = str_hours;
+            times[3] = str_minutes;
+        }
+
+        if(dayOrNot){
+            dayswitch_time.setText(times[0] + ":" + times[1]);
+        } else {
+            nightswitch_time.setText(times[2] + ":" + times[3]);
         }
     }
 
@@ -530,12 +570,12 @@ public class Wednesday extends Fragment {
         if (wed_switches.get(0).getState()) {
             String day_hours_minutes = wed_switches.get(0).getTime();
             int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
-            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String[] string_a_day_hours_minutes = int_conversion_rightFormat(intday_hours_minutes[0], intday_hours_minutes[1]);
             String night_hours_minutes = wed_switches.get(1).getTime();
             int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
-            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
-            wed_switch1.setText("1. " + wed_switches.get(0).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + wed_switches.get(1).getType() + ": "
-                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            String[] string_a_night_hours_minutes = int_conversion_rightFormat(intnight_hours_minutes[0], intnight_hours_minutes[1]);
+            wed_switch1.setText("1. " + wed_switches.get(0).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1] + ", " + wed_switches.get(1).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1] + " ");
             wed_independentSwitches[0].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             wed_switch1.setText("");
@@ -544,12 +584,12 @@ public class Wednesday extends Fragment {
         if (wed_switches.get(2).getState()) { // second switch
             String day_hours_minutes = wed_switches.get(2).getTime();
             int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
-            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String[] string_a_day_hours_minutes = int_conversion_rightFormat(intday_hours_minutes[0], intday_hours_minutes[1]);
             String night_hours_minutes = wed_switches.get(3).getTime();
             int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
-            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
-            wed_switch2.setText("2. " + wed_switches.get(2).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + wed_switches.get(3).getType() + ": "
-                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            String[] string_a_night_hours_minutes = int_conversion_rightFormat(intnight_hours_minutes[0], intnight_hours_minutes[1]);
+            wed_switch2.setText("2. " + wed_switches.get(2).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1] + ", " + wed_switches.get(3).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1] + " ");
             wed_independentSwitches[1].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             wed_switch2.setText("");
@@ -558,12 +598,12 @@ public class Wednesday extends Fragment {
         if (wed_switches.get(4).getState()) { // third switch
             String day_hours_minutes = wed_switches.get(4).getTime();
             int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
-            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String[] string_a_day_hours_minutes = int_conversion_rightFormat(intday_hours_minutes[0], intday_hours_minutes[1]);
             String night_hours_minutes = wed_switches.get(5).getTime();
             int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
-            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
-            wed_switch3.setText("3. " + wed_switches.get(4).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + wed_switches.get(5).getType() + ": "
-                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            String[] string_a_night_hours_minutes = int_conversion_rightFormat(intnight_hours_minutes[0], intnight_hours_minutes[1]);
+            wed_switch3.setText("3. " + wed_switches.get(4).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1] + ", " + wed_switches.get(5).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1] + " ");
             wed_independentSwitches[2].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             wed_switch3.setText("");
@@ -572,12 +612,12 @@ public class Wednesday extends Fragment {
         if (wed_switches.get(6).getState()) { // fourt switch
             String day_hours_minutes = wed_switches.get(6).getTime();
             int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
-            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String[] string_a_day_hours_minutes = int_conversion_rightFormat(intday_hours_minutes[0], intday_hours_minutes[1]);
             String night_hours_minutes = wed_switches.get(7).getTime();
             int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
-            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
-            wed_switch4.setText("4. " + wed_switches.get(6).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + wed_switches.get(7).getType() + ": "
-                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            String[] string_a_night_hours_minutes = int_conversion_rightFormat(intnight_hours_minutes[0], intnight_hours_minutes[1]);
+            wed_switch4.setText("4. " + wed_switches.get(6).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1] + ", " + wed_switches.get(7).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1] + " ");
             wed_independentSwitches[3].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             wed_switch4.setText("");
@@ -586,12 +626,12 @@ public class Wednesday extends Fragment {
         if (wed_switches.get(8).getState()) { // fifth switch
             String day_hours_minutes = wed_switches.get(8).getTime();
             int[] intday_hours_minutes = to_int_conversion_24hrs(day_hours_minutes);
-            String[] string_a_day_hours_minutes = int_conversion_24to12(intday_hours_minutes[0], intday_hours_minutes[1], true);
+            String[] string_a_day_hours_minutes = int_conversion_rightFormat(intday_hours_minutes[0], intday_hours_minutes[1]);
             String night_hours_minutes = wed_switches.get(9).getTime();
             int[] intnight_hours_minutes = to_int_conversion_24hrs(night_hours_minutes);
-            String[] string_a_night_hours_minutes = int_conversion_24to12(intnight_hours_minutes[0], intnight_hours_minutes[1], true);
-            wed_switch5.setText("5. " + wed_switches.get(8).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1]+" "+string_a_day_hours_minutes[2] + ", " + wed_switches.get(9).getType() + ": "
-                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1]+" "+string_a_night_hours_minutes[2] + " ");
+            String[] string_a_night_hours_minutes = int_conversion_rightFormat(intnight_hours_minutes[0], intnight_hours_minutes[1]);
+            wed_switch5.setText("5. " + wed_switches.get(8).getType() + ": " + string_a_day_hours_minutes[0]+":"+string_a_day_hours_minutes[1] + ", " + wed_switches.get(9).getType() + ": "
+                    + string_a_night_hours_minutes[0]+":"+string_a_night_hours_minutes[1] + " ");
             wed_independentSwitches[4].setVisibility(View.VISIBLE); // it becomes visible in the layout
         } else {
             wed_switch5.setText("");
@@ -600,28 +640,11 @@ public class Wednesday extends Fragment {
     }
 
     // Method that convers the time to the right output format
-    // We use the 12-AM-PM format in our code / layout / app
-    // This method can be found online (even though the logic is not hard)
-    static String[] int_conversion_24to12(int hour, int minute, boolean checkIf_12) {
-        String amPm = "AM";
+    static String[] int_conversion_rightFormat(int hour, int minute) {
         String minuteStr = String.valueOf(minute);
 
-        if(minute == 0){
-            minuteStr = "00";
-        } else if(minute < 10){
+        if(minute < 10){
             minuteStr = "0"+String.valueOf(minute);
-        }
-
-        // We now switch to PM, since we are past noon
-        if(checkIf_12){
-            if(hour >= 13){
-                hour -= 12;
-                amPm = "PM";
-            } else if(hour == 12){
-                amPm = "PM";
-            } else if(hour == 0){
-                hour = 12;
-            }
         }
 
         String hourStr = String.valueOf(hour);
@@ -630,7 +653,7 @@ public class Wednesday extends Fragment {
             hourStr = "0"+String.valueOf(hour);
         }
 
-        String[] hour_minutes = new String[]{hourStr, minuteStr, amPm};
+        String[] hour_minutes = new String[]{hourStr, minuteStr, ""};
         return hour_minutes;
     }
 
@@ -657,7 +680,7 @@ public class Wednesday extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast toast_max_switches5 = Toast.makeText(getActivity().getApplicationContext(), "Switch is not added. You can add a maximum of 5 switches per weekday", Toast.LENGTH_LONG);
+                    Toast toast_max_switches5 = Toast.makeText(getActivity().getApplicationContext(), "Switch is not added. You can add a maximum of 5 switches per weekday", Toast.LENGTH_SHORT);
                     toast_max_switches5.show(); // display the toast: length long
                 }
             });
@@ -677,7 +700,7 @@ public class Wednesday extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast toast_max_switches5 = Toast.makeText(getActivity().getApplicationContext(), "You've now added the maximum of 5 switches.", Toast.LENGTH_LONG);
+                            Toast toast_max_switches5 = Toast.makeText(getActivity().getApplicationContext(), "You've now added the maximum of 5 switches.", Toast.LENGTH_SHORT);
                             toast_max_switches5.show(); // display the toast: length long
                         }
                     });
