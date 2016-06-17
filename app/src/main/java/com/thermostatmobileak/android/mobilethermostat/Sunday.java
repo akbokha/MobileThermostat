@@ -466,7 +466,7 @@ public class Sunday extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() { // set the (new) day and night temperature in the layout
-                            sun_dayTemp.setText(dayTemp + " \u2103");
+                            sun_dayTemp.setText(dayTemp + " \u2103"); // \u2103 is the code for the celsius degree symbol
                             sundayNightTemp.setText(nightTemp + " \u2103");
                         }
                     });

@@ -150,7 +150,7 @@ public class Saturday extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {  // setting the day and nigh temperature in the fragment
-                            sat_dayTemp.setText(dayTemp + " \u2103");
+                            sat_dayTemp.setText(dayTemp + " \u2103"); // \u2103 is the code for the celsius degree symbol
                             saturdayNightTemp.setText(nightTemp +  " \u2103");
                         }
                     });
@@ -466,7 +466,7 @@ public class Saturday extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() { // set the (new) day and night temperature in the layout
-                            sat_dayTemp.setText(dayTemp + " \u2103");
+                            sat_dayTemp.setText(dayTemp + " \u2103"); // \u2103 is the code for the celsius degree symbol
                             saturdayNightTemp.setText(nightTemp + " \u2103");
                         }
                     });

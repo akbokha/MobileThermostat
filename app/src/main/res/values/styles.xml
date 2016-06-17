@@ -6,6 +6,7 @@
         <item name="colorPrimary">#FF5722</item>
         <item name="colorPrimaryDark">#E64A19</item>
         <item name="colorAccent">#FF5722</item>
+        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
     </style>
 
     <style name="home_screen_text">
@@ -17,6 +18,10 @@
         <item name="colorAccent">#FFCC00</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:background">#5fa3d0</item>
+    </style>
+
+    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+    <item name="android:src">@drawable/help_26</item>
     </style>
 
 </resources>

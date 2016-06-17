@@ -14,18 +14,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".DayNight_Temp_Change"
-            android:label="Day and Night Temperatures"></activity>
+            android:label="Day and Night Temperatures"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".WeekOverview"
-            android:label="Week Overview"></activity>
+            android:label="Week Overview"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
