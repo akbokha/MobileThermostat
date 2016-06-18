@@ -12,13 +12,13 @@
     android:paddingTop="12dp"
     tools:context="com.thermostatmobileak.android.mobilethermostat.DayNight_Temp_Change">
 
-     <TextView
+    <!-- <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textSize="15.5sp"
         android:text="Here you can change the day and night temperatures that will be used in the week program"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"/> -->
 
 
         <LinearLayout

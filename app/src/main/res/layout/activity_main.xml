@@ -7,9 +7,9 @@
     android:layout_height="match_parent"
     android:background="#CFD8DC"
     android:orientation="vertical"
-    android:paddingLeft="6dp"
-    android:paddingRight="6dp"
-    android:paddingTop="8dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:paddingTop="0dp"
     tools:context="com.thermostatmobileak.android.mobilethermostat.MainActivity">
 
 
@@ -21,8 +21,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="6dp"
             android:layout_marginLeft="6dp"
             android:layout_weight="0.8"
             android:gravity="center_horizontal"
@@ -43,7 +43,7 @@
                     style="@style/home_screen_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="0dp"
                     android:layout_marginLeft="10dp"
                     android:text="Temperature"
                     android:textSize="17sp"
@@ -164,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
@@ -209,7 +209,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="0dp"
         android:gravity="center_horizontal">
 
         <CheckBox
@@ -238,8 +238,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
         android:text="Week Program is enabled" />
 
     <Button
@@ -253,7 +253,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="6dp"
         android:background="#FF9E80" />
 
     <RelativeLayout
@@ -293,7 +293,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         android:gravity="center_horizontal">
 
         <ImageView
@@ -335,13 +335,13 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:background="#FF9E80" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_horizontal">
 
         <ImageView
