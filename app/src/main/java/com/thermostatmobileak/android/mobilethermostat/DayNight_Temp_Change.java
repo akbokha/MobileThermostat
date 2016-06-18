@@ -169,7 +169,6 @@ public class DayNight_Temp_Change extends AppCompatActivity {
     // We need this method for the help button in the activity bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -177,16 +176,13 @@ public class DayNight_Temp_Change extends AppCompatActivity {
     // We need this method for the help button in the activity bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // setting up the dialog that pops up when you click on info in the menu
         if (id == R.id.action_info) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
-            builder.setTitle("Day and Night Temperature Info");
+            builder.setTitle("Day and Night Temperature Info"); // title of the dialog box
             builder.setMessage(R.string.info_daynight); // info text
             builder.setPositiveButton("Go Back", null); // button that goes back to the activity
             builder.show();

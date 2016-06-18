@@ -534,7 +534,6 @@ public class MainActivity extends AppCompatActivity  {
     // method for the three dots menu in the app activity bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -542,18 +541,15 @@ public class MainActivity extends AppCompatActivity  {
     // method that handles the action in the three dots menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // setting up the dialog that pops up when you click on info in the menu
         if (id == R.id.action_info) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
-            builder.setTitle("Homescreen Info");
-            builder.setMessage(R.string.info_home);
-            builder.setPositiveButton("Go Back", null);
+            builder.setTitle("Homescreen Info"); // title of the dialog box
+            builder.setMessage(R.string.info_home); // text in the dialog box
+            builder.setPositiveButton("Go Back", null); // button that goes back to the actiivty
             builder.show();
         }
         return super.onOptionsItemSelected(item);

@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  * Created by s158881 on 6-6-2016.
  */
 public class PagerAdapter extends FragmentStatePagerAdapter{
-
+    /// we need this method for the scrollable fragment ayout that we use
     public PagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -48,6 +48,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter{
         return 7;
     }
 
+    // the text of the differnt fragments of the layout
     @Override
     public CharSequence getPageTitle(int position) {
         String title=" ";
